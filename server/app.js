@@ -54,7 +54,7 @@ app.use('/api/auth',require('./routes/auth.routes'));
 
 
 // Setup server port
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 app.listen(port,()=>{
     console.log(`Server running at port ${port}`.brightYellow.underline);
 })

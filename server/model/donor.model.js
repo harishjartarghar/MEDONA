@@ -1,4 +1,4 @@
-const sql = require("./db.js");
+const sql = require("../config/MYSQL_DB");
 
 // constructor
 const Donor = function(donor) {
@@ -6,7 +6,7 @@ const Donor = function(donor) {
   this.name = donor.name;
   this.city = donor.active;
   this.mobile = donor.mobile;
-  this.profile=donor.profile;
+  this.password=donor.password;
 };
 
 
@@ -25,6 +25,45 @@ Donor.create = (newDonor, result) => {
 
 Donor.findById = (donorId, result) => {
   sql.query(`SELECT * FROM donors WHERE id = ${donorId}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found donor: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Donor with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+Donor.findByEmail = (email, result) => {
+  sql.query(`SELECT * FROM donors WHERE email = ${email}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found donor: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Donor with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+
+Donor.findByMobile = (email, result) => {
+  sql.query(`SELECT * FROM donors WHERE mobile = ${mobile}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
