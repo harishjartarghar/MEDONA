@@ -41,9 +41,11 @@ exports.VERIFY_TOKEN=(req,res)=>{
 
 	// verify a token symmetric
 	jwt.verify(token, config.JWT_SECRET, function(err, decoded) {
-  		if(!token)
+		if(err)
   			return res.status(403).json({access:false,message:"URL EXPIRED"});
-  		return res.json(200).json({access:true});
+  		if(!decoded)
+  			return res.status(403).json({access:false,message:"URL EXPIRED"});
+  		return res.json(200).json({access:true,email:decoded.email});
 	});
 
 }
