@@ -1,6 +1,4 @@
-exports.verify_subject=()=>{
-	return 'MEDONA REGISTRATION';
-};
+exports.verify_subject='MEDONA REGISTRATION';
 
 exports.verify_template=(token)=>{
 	return `

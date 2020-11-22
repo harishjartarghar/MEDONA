@@ -2,7 +2,7 @@ const Donor = require("../model/donor.model");
 const bcrypt = require('bcryptjs');
 const { verify_subject, verify_template } = require("../config/mailtemplate");
 const jwt = require('jsonwebtoken');
-const { nodemailsender } = require("../config/nodemailer");
+const { VERIFY_MAIL } = require("../config/nodemailer");
 const config = require("../config/config");
 
 exports.REGISTER_DONOR=async (req,res)=>{
@@ -15,10 +15,14 @@ exports.REGISTER_DONOR=async (req,res)=>{
    //checking if email is already registered
     Donor.findByEmail(email,(err, data) => {
     if (err)
+    {
+      console.log(err);
       return res.status(500).json({
         message:
           err.message || "Some error occurred."
       });
+    }
+      
     
     if(data!=null)
     	 return res.status(500).json({
@@ -26,13 +30,15 @@ exports.REGISTER_DONOR=async (req,res)=>{
           "Email is already registered! :)"
       });
 
-  });
-
     const token=jwt.sign({email:email},config.JWT_SECRET,{ expiresIn: '1h' }); 
-    nodemailsender(email,verify_template(token),verify_subject);
+    VERIFY_MAIL(email,verify_template(token),verify_subject);
 
 
     return res.status(201).json({message: 'Verify mail sent to the emailid'});
+
+  });
+
+  
         
 }
 
@@ -50,13 +56,13 @@ exports.VERIFY_TOKEN=(req,res)=>{
 
 }
 
-exports.SAVE_DONOR=async ()=>{
+exports.SAVE_DONOR=async (req,res)=>{
 
 	const {email,mobile,name,city,password}=req.body;
 
 	 // Validate request
   if (!email || !mobile || !name || !city || !password) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Invalid request!"
     });
   }
@@ -77,7 +83,7 @@ exports.SAVE_DONOR=async ()=>{
       });
     else 
     {
-    	const token=jwt.sign({id:donor.insertId},config.JWT_SECRET); 
+    	const token=jwt.sign({id:NewDonor.insertId},config.JWT_SECRET); 
     	return res.header('jwt',token).status(201).json({donor:data.newDonor,message:"Registration Complete"});
     }
   });

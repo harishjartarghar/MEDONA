@@ -1,12 +1,21 @@
-const sql = require("../config/MYSQL_DB");
+const mysql = require("mysql");
+const dbConfig = require("../config/config.js");
+
+// Create a connection to the database
+const sql = mysql.createConnection({
+  host: dbConfig.HOST,
+  user: dbConfig.USER,
+  password: dbConfig.PASSWORD,
+  database: dbConfig.DB
+});
 
 // constructor
 const Donor = function(donor) {
   this.email = donor.email;
   this.name = donor.name;
-  this.city = donor.active;
   this.mobile = donor.mobile;
   this.password=donor.password;
+  this.city = donor.city;
 };
 
 
@@ -43,7 +52,7 @@ Donor.findById = (donorId, result) => {
 };
 
 Donor.findByEmail = (email, result) => {
-  sql.query(`SELECT * FROM donors WHERE email = ${email}`, (err, res) => {
+  sql.query(`SELECT * FROM donors WHERE email = '${email}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -57,7 +66,7 @@ Donor.findByEmail = (email, result) => {
     }
 
     // not found Donor with the id
-    result({ kind: "not_found" }, null);
+    result(null, null);
   });
 };
 
