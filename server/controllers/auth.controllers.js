@@ -36,7 +36,7 @@ exports.REGISTER_DONOR=async (req,res)=>{
     VERIFY_MAIL(email,verify_template(token),verify_subject);
 
 
-    return res.status(201).json({message: 'Verify mail sent to the emailid'});
+    return res.status(201).json({message: 'REGISTRATION LINK SENT TO EMAIL'});
 
   });
 
@@ -86,13 +86,14 @@ exports.SAVE_DONOR=async (req,res)=>{
     else 
     {
     	const token=jwt.sign({id:data.id},config.JWT_SECRET); 
+      data.password=null;
     	return res.header('jwt',token).status(201).json({donor:data,message:"Registration Complete"});
     }
   });
 
 }
 
-exports.LOGIN_DONOR=async ()=>{
+exports.LOGIN_DONOR=async (req,res)=>{
 
 	const {email,password}=req.body;
 
@@ -121,7 +122,8 @@ exports.LOGIN_DONOR=async ()=>{
     if(!passCheck) 
     	return res.status(422).json({message:'Email/Number and Password do not match'});
 
-    const token=jwt.sign({id:data.id},config.JWT_SECRET); 
+    const token=jwt.sign({id:data.id},config.JWT_SECRET);
+    data.password=null; 
     return res.header('jwt',token).status(201).json({donor:data,message:"Login Success"});
   });
 
@@ -158,7 +160,7 @@ exports.REGISTER_NGO=async (req,res)=>{
     VERIFY_MAIL(email,ngo_verify_template(token),ngo_verify_subject);
 
 
-    return res.status(201).json({message: 'Verify mail sent to the emailid'});
+    return res.status(201).json({message: 'REGISTRATION LINK SENT TO EMAIL'});
 
   });
 
@@ -195,13 +197,14 @@ exports.SAVE_NGO=async (req,res)=>{
     else 
     {
       const token=jwt.sign({id:data.id},config.JWT_SECRET); 
-      return res.header('jwt',token).status(201).json({donor:data,message:"Registration Complete"});
+      data.password=null;
+      return res.header('jwt',token).status(201).json({ngo:data,message:"Registration Complete"});
     }
   });
 
 }
 
-exports.LOGIN_NGO=async ()=>{
+exports.LOGIN_NGO=async (req,res)=>{
 
   const {email,password}=req.body;
 
@@ -231,6 +234,7 @@ exports.LOGIN_NGO=async ()=>{
       return res.status(422).json({message:'Email and Password do not match'});
 
     const token=jwt.sign({id:data.id},config.JWT_SECRET); 
+    data.password=null;
     return res.header('jwt',token).status(201).json({ngo:data,message:"Login Success"});
   });
 

@@ -27,6 +27,7 @@ Donor.create = (newDonor, result) => {
       return;
     }
 
+
     console.log("created Donor: ", { id: res.insertId, ...newDonor });
     result(null, { id: res.insertId, ...newDonor });
   });
