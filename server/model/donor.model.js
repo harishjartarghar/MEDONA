@@ -72,7 +72,7 @@ Donor.findByEmail = (email, result) => {
 
 
 Donor.findByMobile = (email, result) => {
-  sql.query(`SELECT * FROM donors WHERE mobile = ${mobile}`, (err, res) => {
+  sql.query(`SELECT * FROM donors WHERE mobile = '${mobile}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
