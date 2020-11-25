@@ -3,7 +3,9 @@ import {Redirect} from "react-router-dom";
 import Stepper from '../components/stepper';
 import DetailForm from '../components/DetailForm';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import AppBar from '../components/AppBar';
 
 
 class DonorRegister extends React.Component {
@@ -12,7 +14,8 @@ constructor(props)
 {	
 	super(props);
 	this.state={
-		activeStep:1
+		activeStep:1,
+    steps:['FILL BASIC DETAILS', 'SET PASSWORD']
 	}
 }
 
@@ -32,13 +35,16 @@ getStepContent=(stepIndex)=> {
 }
 
 
+
+
+
   
   handleNext = () => {
     this.setState({activeStep:this.state.activeStep + 1});
   };
 
   handleBack = () => {
-  	this.setState({activeStep:this.state.activeStep==1?this.state.activeStep:this.state.activeStep - 1});
+  	this.setState({activeStep:this.state.activeStep===1?this.state.activeStep:this.state.activeStep - 1});
   };
 
   handleReset = () => {
@@ -52,8 +58,11 @@ render(){
 		return <Redirect to="/login"/>;
 	
 	return (
- 		<div>
- 		<Stepper activeStep={this.state.activeStep}/>
+    <div className="donor">
+    <AppBar/>
+ 		<Container>
+   
+ 		<Stepper activeStep={this.state.activeStep} steps={this.state.steps}/>
  		<DetailForm/>
  	<div>
         {this.state.activeStep === 3 ? (
@@ -79,7 +88,8 @@ render(){
           </div>
         )}
       </div>
- 	    </div>
+ 	    </Container>
+      </div>
 			);
 	
 	}

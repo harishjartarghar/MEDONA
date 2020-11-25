@@ -1,6 +1,6 @@
 import React from "react";
 
-class LOGIN extends React.Component {
+class SET_PASSWORD extends React.Component {
 	render(){
 		return (
      		<div>
@@ -12,4 +12,4 @@ class LOGIN extends React.Component {
   
 }
 
-export default LOGIN;
+export default SET_PASSWORD;

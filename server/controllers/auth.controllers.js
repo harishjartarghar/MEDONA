@@ -49,11 +49,23 @@ exports.VERIFY_TOKEN=(req,res)=>{
 
 	// verify a token symmetric
 	jwt.verify(token, config.JWT_SECRET, function(err, decoded) {
-		if(err)
+		  if(err)
   			return res.status(403).json({access:false,message:"URL EXPIRED"});
   		if(!decoded)
   			return res.status(403).json({access:false,message:"URL EXPIRED"});
-  		return res.json(200).json({access:true,email:decoded.email,mobile:decoded.mobile,type:decoded.type});
+
+  //checking if email is already registered
+    Donor.findByEmail(decoded.email,async (err, data) => {
+    if (err)
+      return res.status(403).json({access:false,message:"SOMETHING WENT WRONG!"});
+    
+    if(data!=null)
+       return res.json(500).json({access:false,message:"DED SHANE ! REGISTRATION COMPLETE HUA HAI"});
+
+    return res.json(200).json({access:true,email:decoded.email,mobile:decoded.mobile,type:decoded.type});
+  });    
+
+  		
 	});
 
 }
