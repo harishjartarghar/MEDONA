@@ -31,7 +31,7 @@ constructor(props)
     error:null,
     access:true,
     email:null,
-    loading:false,
+    loading:true,
     mobile:null,
     city:null,
     password:null,
@@ -62,25 +62,25 @@ handleInputChange=(e)=> {
     });
 }
 
-// componentDidMount=()=>{
-//   let query = this.useQuery();
-//   const url='http://localhost:8080/api/auth/donor_register';
-//       axios.get(url,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
-//     .then(res=>{
-//         this.setState({email:res.data.email,loading:false});
+componentDidMount=()=>{
+  let query = this.useQuery();
+  const url='http://localhost:8080/api/auth/donor_register';
+      axios.get(url,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
+    .then(res=>{
+        this.setState({email:res.data.email,loading:false});
         
-//     })
-//     .catch(error=>{
-//       if(error.response.status===403)
-//       { 
+    })
+    .catch(error=>{
+      if(error.response.status===403)
+      { 
         
-//          this.setState({error:error.response.data.message,open:true});
-//         setTimeout(()=>{
-//          this.setState({access:false,loading:false});
-//        },3000);
-//       }
-//     });
-// }
+         this.setState({error:error.response.data.message,open:true});
+        setTimeout(()=>{
+         this.setState({access:false,loading:false});
+       },3000);
+      }
+    });
+}
 
 useQuery =()=> {return new URLSearchParams(this.props.location.search);}
 
