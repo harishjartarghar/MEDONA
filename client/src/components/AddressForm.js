@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function DetailForm({handleInputChange,data}) {
+export default function AddressForm({handleInputChange,data}) {
   const classes = useStyles();
   
 
@@ -51,85 +51,93 @@ export default function DetailForm({handleInputChange,data}) {
       <CssBaseline />
       <div className={classes.paper}>
       <Typography className={classes.title} component="h1" variant="h5">
-          Fill Details
+          Address
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} >
               <TextField
-                autoComplete="fname"
-                name="firstName"
+                autoComplete="street"
+                name="street"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="street"
+                label="Street"
                 size="small"
                 autoFocus
-            	value={data.firstName}
+            	value={data.street}
                 onChange={(e)=>{handleInputChange(e)}}
-                error={data.Ename}
+                error={data.Estreet}
               />
             </Grid>
+          
+            
             <Grid item xs={12} sm={6}>
               <TextField
-                variant="outlined"
-                onChange={(e)=>{handleInputChange(e)}}
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                size="small"
-                value={data.lastName}
-                autoComplete="lname"
-
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+                autoComplete="city"
+                name="city"
                 variant="outlined"
                 required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                size="small"
-                value={data.email}
-                onChange={(e)=>{handleInputChange(e)}}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="mobile"
-                name="mobile"
-             	error={data.Emobile}
-                variant="outlined"
-                required
-                fullWidth
-                id="mobile"
-                label="Mobile No"
-               size="small"
-               onChange={(e)=>{handleInputChange(e)}}
-               value={data.mobile}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                error={data.Ecity}
-                variant="outlined"
-                required
-                value={data.city}
                 fullWidth
                 id="city"
                 label="City"
-                name="City"
-                autoComplete="city"
                 size="small"
+            	value={data.city}
                 onChange={(e)=>{handleInputChange(e)}}
+                error={data.Ecity}
               />
             </Grid>
+            <Grid item xs={12} sm={6}> 
+              <TextField
+                autoComplete="district"
+                name="district"
+                required
+                variant="outlined"
+                required
+                fullWidth
+                id="district"
+                label="District"
+                size="small"
+                
+            	value={data.district}
+                onChange={(e)=>{handleInputChange(e)}}
+                error={data.Edistrict}
+              />
+            </Grid>
+              <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="state"
+                name="state"
+                variant="outlined"
+                required
+                fullWidth
+                id="state"
+                label="state"
+                size="small"
+              	required
+            	value={data.state}
+                onChange={(e)=>{handleInputChange(e)}}
+                error={data.Estate}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="pincode"
+                name="pincode"
+                variant="outlined"
+                required
+                fullWidth
+                id="pincode"
+                label="Pincode"
+                size="small"
+                
+            	value={data.pincode}
+                onChange={(e)=>{handleInputChange(e)}}
+                error={data.Epincode}
+              />
+            </Grid>
+           
             
             
           </Grid>
