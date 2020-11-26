@@ -6,9 +6,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Check from '@material-ui/icons/Check';
-import PasswordIcon from '@material-ui/icons/Lock';
-import InfoIcon from '@material-ui/icons/Info';
-import EmailIcon from '@material-ui/icons/Email';
 import StepConnector from '@material-ui/core/StepConnector';
 
 
@@ -110,29 +107,40 @@ const useColorlibStepIconStyles = makeStyles({
   },
 });
 
+
+
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '50%',
+    margin:'auto',
+    marginTop:'10px',
+    border:'2px solid rgb(138,35,135)',
+
+  },
+  button: {
+    marginRight: theme.spacing(1),
+  },
+  instructions: {
+    marginTop: theme.spacing(0),
+    marginBottom: theme.spacing(0),
+  },
+ 
+}));
+
+
+
+export default function CustomizedSteppers({activeStep,steps,icons}) {
+  const classes = useStyles();
+
 function ColorlibStepIcon(props) {
   const classes = useColorlibStepIconStyles();
   const { active, completed } = props;
 
-  const icons = {
-    1: <EmailIcon />,
-    2: <InfoIcon />,
-    3: <PasswordIcon />,
-  };
+ 
 
-  return (
-    <div
-      className={clsx(classes.root, {
-        [classes.active]: active,
-        [classes.completed]: completed,
-      })}
-    >
-      {icons[String(props.icon)]}
-    </div>
-  );
-}
-
-ColorlibStepIcon.propTypes = {
+  ColorlibStepIcon.propTypes = {
   /**
    * Whether this step is active.
    */
@@ -147,35 +155,23 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    margin:'auto',
-    marginTop:'10px',
-    border:'2px solid rgb(138,35,135)',
-
-  },
-  button: {
-    marginRight: theme.spacing(1),
-  },
-  instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-}));
-
-
-
-export default function CustomizedSteppers({activeStep,steps}) {
-  const classes = useStyles();
-
-
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+        [classes.completed]: completed,
+      })}
+    >
+      {icons[String(props.icon)]}
+    </div>
+  );
+}
   
 
   return (
     <div className={classes.root}>
-      <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-        <Step key="EMAIL VERIFIED">
+      <Stepper  alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+        <Step  key="EMAIL VERIFIED">
             <StepLabel StepIconComponent={ColorlibStepIcon}>EMAIL VERIFIED</StepLabel>
           </Step>
         {steps.map((label) => (

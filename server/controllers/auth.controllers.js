@@ -45,12 +45,15 @@ exports.REGISTER_DONOR=async (req,res)=>{
 }
 
 exports.VERIFY_TOKEN=(req,res)=>{
-	const {token}=req.body;
-
+	const {token}=req.headers;
 	// verify a token symmetric
 	jwt.verify(token, config.JWT_SECRET, function(err, decoded) {
 		  if(err)
-  			return res.status(403).json({access:false,message:"URL EXPIRED"});
+      {
+        
+        return res.status(403).json({access:false,message:"URL EXPIRED"});
+  			
+      }
   		if(!decoded)
   			return res.status(403).json({access:false,message:"URL EXPIRED"});
 
