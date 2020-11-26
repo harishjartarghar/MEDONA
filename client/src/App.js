@@ -14,6 +14,7 @@ function App() {
       <Route exact path="/login" component={LOGIN}/>
       <Route exact path="/donor" component={DonorRegister}/>
       <Route exact path="/ngo" component={NgoRegister}/>
+    
       <Redirect to="/login"/>
     </Switch>
   </Router>
