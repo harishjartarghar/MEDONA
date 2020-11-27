@@ -12,7 +12,7 @@ import './style.css'
 import PasswordIcon from '@material-ui/icons/Lock';
 import InfoIcon from '@material-ui/icons/Info';
 import EmailIcon from '@material-ui/icons/Email';
-
+import Drop from '../components/backdrop';
 
 
 
@@ -44,6 +44,7 @@ constructor(props)
     re_password:null,
     Epassword:false,
     Ere_password:false,
+    drop:false,
     icons:{
     1: <EmailIcon />,
     2: <InfoIcon />,
@@ -67,6 +68,9 @@ componentDidMount=()=>{
   const url='http://localhost:8080/api/auth/donor_register';
       axios.get(url,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
     .then(res=>{
+      if(res.data.type!=="donor")
+        this.props.history.push("/login");
+      else
         this.setState({email:res.data.email,loading:false});
         
     })
@@ -76,7 +80,7 @@ componentDidMount=()=>{
         
          this.setState({error:error.response.data.message,open:true});
         setTimeout(()=>{
-         this.setState({access:false,loading:false});
+         this.props.history.push("/login");
        },3000);
       }
     });
@@ -128,7 +132,40 @@ onSubmit=(e)=>{
         return;
       }
 
-      this.setState({loading:true});
+      this.setState({drop:true});
+
+      this.REGISTER();
+}
+
+
+REGISTER=()=>{
+  let query = this.useQuery();
+  const url='http://localhost:8080/api/auth/donor_register'
+  const data={
+    email:this.state.email,
+    name:this.state.firstName+" "+this.state.lastName,
+    mobile:this.state.mobile,
+    city:this.state.city,
+    password:this.state.password
+  }
+   axios.post(url,data,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
+    .then(res=>{
+       
+       this.setState({open:true,error:"Registration Complete!"});
+       localStorage.setItem("jwt", res.data.jwt);
+       localStorage.setItem("donor",JSON.stringify(res.data.donor));
+       localStorage.setItem("type","donor");
+
+        setTimeout(()=>{
+            this.setState({drop:false});
+          this.props.history.push("/dashboard");
+        },2000);
+        
+    })
+    .catch(error=>{
+      console.log(error);
+         this.setState({drop:false,error:"Something went wrong!",open:true});
+    });
 }
 
   
@@ -186,7 +223,7 @@ const { classes } = this.props;
 	if(query.get("token")===undefined || query.get("token")===null || query.get("token")==="")
 		return <Redirect to="/login"/>;
   if(this.state.loading)
-    return (<div>loading
+    return (<div><Drop drop={true}/>
         <Snackbar
         anchorOrigin={{ vertical:'top', horizontal:'right' }}
         open={this.state.open}
@@ -237,6 +274,7 @@ const { classes } = this.props;
         message={this.state.error}
       />
  	    </Container>
+      <Drop drop={this.state.drop}/>
       </div>
 			);
 	

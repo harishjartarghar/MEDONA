@@ -22,6 +22,8 @@ import TextField from '@material-ui/core/TextField';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import Drop from './backdrop';
+import axios from 'axios';
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,32 +35,86 @@ export default function Signup({modal,toggle}) {
  const [dS,setDS]=useState(false);
   const [ngoS,setNGOS]=useState(false);
   const [open,setOpen]=useState(false);
-  const [email,setEmail]=useState(null);
+  const [Email,setEmail]=useState(null);
+  const [mobile,setMobile]=useState(null);
   const [error,setError]=useState(false);
+  const [Merror,setMError]=useState(false);
   const [message,setMessage]=useState(null);
   const [drop,setDrop]=useState(false);
+  const [type,setType]=useState("success");
 
 
 function submit()
 {
-  if(!email)
+  if(!Email || Email==="")
   {
     setError(true);
+    setMError(false);
+    setType("error");
     setMessage("Email is required!")
     return;
+  }
+
+  if(ngoS)
+  {
+      if(!mobile || mobile==="")
+      {
+        setMError(true);
+        setType("error");
+        setError(false);
+        setMessage("Mobile is required");
+        return;
+      }
   }
 
   if(!dS && !ngoS)
   {
       setOpen(true);
+      setType("error");
       setError(false);
       setMessage("Select Type");
       return;
   }
 
   setDrop(true);
-  
+  var url=null;
+  if(dS)
+  {
+    url='http://localhost:8080/api/auth/donor_email';
+  }
+  else
+  {
+    url='http://localhost:8080/api/auth/ngo_email';
+  }
+ 
+      axios.post(url,{email:Email,mobile:mobile},{headers:{'Content-Type': 'application/json'}})
+    .then(res=>{
+        setType("success");
+        setOpen(true);
+        setMessage(res.data.message);
+        setError(false);
+        setMError(false);
+        setEmail("");
+        setMobile("");
+        setDS(false);
+        setNGOS(false);
 
+
+        setTimeout(()=>{
+          setDrop(false);
+             toggle();
+        },3000);
+       
+        
+    })
+    .catch(error=>{
+        setDrop(false);
+        setType("error");
+        setOpen(true);
+        setMError(false);
+        setError(false);
+        setMessage(error.response.data.message);
+    });
 
 }
   
@@ -114,34 +170,49 @@ function Alert(props) {
             fullWidth
             error={error}
             onChange={(e)=>{setEmail(e.target.value)}}
-            id="email"
+            id="Email"
             label="Email Address"
-            name="email"
-            autoComplete="email"
+            name="Email"
+            
             autoFocus
             size="small"
             helperText={error?message:null}
-            value={email}
-            InputLabelProps={{
-            shrink: true,
-          }}
+            value={Email}
+          
           />
+
+         {ngoS? <TextField
+                     variant="outlined"
+                     margin="normal"
+                     fullWidth
+                     required
+                     error={Merror}
+                     onChange={(e)=>{setMobile(e.target.value)}}
+                     id="mobile"
+                     label="Mobile No"
+                     name="mobile"
+                     size="small"
+                     helperText={Merror?message:null}
+                     value={mobile}
+                   
+                   />:null}
+
         
         </DialogContent>
         <DialogActions>
-          <Button  onClick={toggle} color="primary">
+          <Button  onClick={()=>{setEmail("");setError(false);setDS(false);setNGOS(false);toggle();}} color="primary">
             Cancel
           </Button>
           <Button  color="primary" onClick={submit}>
             signup
           </Button>
         </DialogActions>
-         <Snackbar anchorOrigin={{ vertical:'top', horizontal:'right' }} open={open}  autoHideDuration={2000} onClose={handleClose} >
-        <Alert  severity="error">
+         <Snackbar anchorOrigin={{ vertical:'top', horizontal:'right' }} open={open}  autoHideDuration={5000} onClose={handleClose} >
+        <Alert  severity={type}>
           {message}
         </Alert>
       </Snackbar>
-      <Drop drop={drop} TOGGLE={()=>{setDrop(!drop)}}/>
+      <Drop drop={drop}/>
       </Dialog>
     
   );

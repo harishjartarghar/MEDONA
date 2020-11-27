@@ -4,7 +4,8 @@ const {
 		REGISTER_DONOR,
 		SAVE_DONOR,
 		LOGIN_DONOR,
-		VERIFY_TOKEN,
+		DONOR_VERIFY_TOKEN,
+		NGO_VERIFY_TOKEN,
 		REGISTER_NGO,
 		SAVE_NGO,
 		LOGIN_NGO,
@@ -18,7 +19,7 @@ app.route("/donor_email")
 //Save Donor
 app.route("/donor_register")
    .post(SAVE_DONOR)
-   .get(VERIFY_TOKEN);
+   .get(DONOR_VERIFY_TOKEN);
 
 //Login Donor
 app.route("/donor_login")
@@ -31,7 +32,7 @@ app.route("/ngo_email")
 //Save NGO
 app.route("/ngo_register")
    .post(SAVE_NGO)
-   .get(VERIFY_TOKEN);
+   .get(NGO_VERIFY_TOKEN);
 
 //Login Donor
 app.route("/ngo_login")

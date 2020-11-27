@@ -44,28 +44,28 @@ exports.REGISTER_DONOR=async (req,res)=>{
         
 }
 
-exports.VERIFY_TOKEN=(req,res)=>{
+exports.DONOR_VERIFY_TOKEN=(req,res)=>{
 	const {token}=req.headers;
 	// verify a token symmetric
 	jwt.verify(token, config.JWT_SECRET, function(err, decoded) {
 		  if(err)
       {
         
-        return res.status(403).json({access:false,message:"URL EXPIRED"});
+        return res.status(403).json({access:false,message:"LINK EXPIRED/INVALID"});
   			
       }
   		if(!decoded)
   			return res.status(403).json({access:false,message:"URL EXPIRED"});
-
+      console.log(decoded);
   //checking if email is already registered
     Donor.findByEmail(decoded.email,async (err, data) => {
     if (err)
       return res.status(403).json({access:false,message:"SOMETHING WENT WRONG!"});
     
     if(data!=null)
-       return res.json(500).json({access:false,message:"DED SHANE ! REGISTRATION COMPLETE HUA HAI"});
+       return res.status(403).json({access:false,message:"DED SHANE ! REGISTRATION COMPLETE HUA HAI"});
 
-    return res.json(200).json({access:true,email:decoded.email,mobile:decoded.mobile,type:decoded.type});
+    return res.status(200).json({access:true,email:decoded.email,mobile:decoded.mobile,type:decoded.type});
   });    
 
   		
@@ -102,7 +102,7 @@ exports.SAVE_DONOR=async (req,res)=>{
     {
     	const token=jwt.sign({id:data.id},config.JWT_SECRET); 
       data.password=null;
-    	return res.header('jwt',token).status(201).json({donor:data,message:"Registration Complete"});
+    	return res.status(201).json({jwt:token,donor:data,message:"Registration Complete"});
     }
   });
 
@@ -139,7 +139,7 @@ exports.LOGIN_DONOR=async (req,res)=>{
 
     const token=jwt.sign({id:data.id},config.JWT_SECRET);
     data.password=null; 
-    return res.header('jwt',token).status(201).json({donor:data,message:"Login Success"});
+    return res.status(201).json({'jwt':token,donor:data,message:"Login Success"});
   });
 
   
@@ -183,13 +183,41 @@ exports.REGISTER_NGO=async (req,res)=>{
         
 }
 
+exports.NGO_VERIFY_TOKEN=(req,res)=>{
+  const {token}=req.headers;
+  // verify a token symmetric
+  jwt.verify(token, config.JWT_SECRET, function(err, decoded) {
+      if(err)
+      {
+        
+        return res.status(403).json({access:false,message:"LINK EXPIRED/INVALID"});
+        
+      }
+      if(!decoded)
+        return res.status(403).json({access:false,message:"URL EXPIRED"});
+      console.log(decoded);
+  //checking if email is already registered
+    Ngo.findByEmail(decoded.email,async (err, data) => {
+    if (err)
+      return res.status(403).json({access:false,message:"SOMETHING WENT WRONG!"});
+    
+    if(data!=null)
+       return res.status(403).json({access:false,message:"DED SHANE ! REGISTRATION COMPLETE HUA HAI"});
+
+    return res.status(200).json({access:true,email:decoded.email,mobile:decoded.mobile,type:decoded.type});
+  });    
+
+      
+  });
+
+}
 
 exports.SAVE_NGO=async (req,res)=>{
 
-  const {email,mobile,name,city,password}=req.body;
+  const {email,mobile,Amobile,name,address,password}=req.body;
 
    // Validate request
-  if (!email || !mobile || !name || !city || !password) {
+  if (!email || !mobile || !name || !password) {
     return res.status(400).json({
       message: "Invalid request!"
     });
@@ -200,10 +228,10 @@ exports.SAVE_NGO=async (req,res)=>{
      const hashedpassword=await bcrypt.hash(password,salt);
 
   // Create a Donor
-  const NewNGO = new Ngo({email,mobile,password:hashedpassword,city,name});
+  const NewNGO = new Ngo({email,password:hashedpassword,name});
 
   // Save Customer in the database
-  Ngo.create(NewNGO, (err, data) => {
+  Ngo.create({NGO:NewNGO,mobile,Amobile,address}, (err, data) => {
     if (err)
       return res.status(500).json({
         message:
@@ -212,8 +240,8 @@ exports.SAVE_NGO=async (req,res)=>{
     else 
     {
       const token=jwt.sign({id:data.id},config.JWT_SECRET); 
-      data.password=null;
-      return res.header('jwt',token).status(201).json({ngo:data,message:"Registration Complete"});
+      data.NGO.password=undefined;
+      return res.status(201).json({'jwt':token,ngo:data,message:"Registration Complete"});
     }
   });
 
@@ -250,7 +278,8 @@ exports.LOGIN_NGO=async (req,res)=>{
 
     const token=jwt.sign({id:data.id},config.JWT_SECRET); 
     data.password=null;
-    return res.header('jwt',token).status(201).json({ngo:data,message:"Login Success"});
+
+    return res.status(201).json({jwt:token,donor:data,message:"Login Success"});
   });
 
   

@@ -95,6 +95,7 @@ export default function NGODetailForm({handleInputChange,data}) {
                 variant="outlined"
                 required
                 fullWidth
+                disabled
                 id="mobile"
                 label="Mobile No"
                size="small"
