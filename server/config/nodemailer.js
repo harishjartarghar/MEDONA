@@ -6,8 +6,8 @@ var smtpConfig = {
     port: 465,
     secure: true, // use SSL
     auth: {
-        user: 'medonadbd@gmail.com',
-	pass: 'Medona.1234'
+        user: process.env.email,
+	pass: process.env.password
 	},
 	tls: {
 		rejectUnauthorized: false

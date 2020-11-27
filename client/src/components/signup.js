@@ -94,8 +94,9 @@ function submit()
 
         setTimeout(()=>{
           setDrop(false);
+          setOpen(false);
              toggle();
-        },3000);
+        },2000);
        
         
     })
