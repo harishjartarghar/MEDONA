@@ -1,17 +1,9 @@
 import React,{useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
 import donor from '../assets/donor.jpeg'
 import donor_check from '../assets/donor_check.jpeg'
 import ngo from '../assets/ngo.jpeg'
@@ -154,11 +146,11 @@ function Alert(props) {
          <Grid container style={{textAlign:"center",marginTop:"30px",}}>
             <Grid item xs={6} >
                 
-       <img onClick={()=>{donor_click()}} src={dS?donor_check:donor} style={{maxWidth:"100px",maxHeight:"100px"}}/>
+       <img onClick={()=>{donor_click()}} alt="donor" src={dS?donor_check:donor} style={{maxWidth:"100px",maxHeight:"100px"}}/>
                 
             </Grid>
             <Grid item xs={6} style={{textAlign:"center"}}>
-                 <img onClick={()=>ngo_click()} src={ngoS?ngo_check:ngo} style={{maxWidth:"100px",maxHeight:"100px"}}/>
+                 <img onClick={()=>ngo_click()} alt="ngo" src={ngoS?ngo_check:ngo} style={{maxWidth:"100px",maxHeight:"100px"}}/>
 
             </Grid>
           </Grid>
@@ -200,7 +192,7 @@ function Alert(props) {
         
         </DialogContent>
         <DialogActions>
-          <Button  onClick={()=>{setEmail("");setError(false);setDS(false);setNGOS(false);toggle();}} color="primary">
+          <Button  onClick={()=>{setEmail("");setError(false);setDS(false);setNGOS(false);setOpen(false) ;toggle();}} color="primary">
             Cancel
           </Button>
           <Button  color="primary" onClick={submit}>

@@ -39,8 +39,6 @@ constructor(props)
     lastName:null,
     Ecity:false,
     Ename:false,
-    Ename:false,
-    password:null,
     re_password:null,
     Epassword:false,
     Ere_password:false,
@@ -218,7 +216,6 @@ REGISTER=()=>{
 render(){
 	let query = this.useQuery();
 
-const { classes } = this.props;
 
 	if(query.get("token")===undefined || query.get("token")===null || query.get("token")==="")
 		return <Redirect to="/login"/>;
