@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const dbConfig = require("../config/config.js");
-
+const Address=require('./address.model');
+const Mobile=require('./mobile.model');
 // Create a connection to the database
 const sql = mysql.createConnection({
   host: dbConfig.HOST,
@@ -13,22 +14,60 @@ const sql = mysql.createConnection({
 const NGO = function(ngo) {
   this.email = ngo.email;
   this.name = ngo.name;
-  this.mobile = ngo.mobile;
   this.password=ngo.password;
-  this.city = ngo.city;
 };
 
 
-NGO.create = (newNGO, result) => {
-  sql.query("INSERT INTO ngos SET ?", newNGO, (err, res) => {
+NGO.create = (data, result) => {
+  sql.query("INSERT INTO ngos SET ?", data.NGO, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created NGO: ", { id: res.insertId, ...newNGO });
-    result(null, { id: res.insertId, ...newNGO });
+    const NewAddress = new Address({id:res.insertId,address:data.address});
+
+
+    Address.create(NewAddress, (err, data1) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    const newMobile=new Mobile({id:res.insertId,mobile:data.mobile});
+
+    Mobile.create(newMobile, (err, data2) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if(!data.Amobile)
+    {
+         console.log("created NGO: ", { id: res.insertId,...data  });
+          result(null, { id: res.insertId,...data });
+    }
+    else
+    {
+      const newMobile=new Mobile({id:res.insertId,mobile:data.Amobile});
+
+      Mobile.create(newMobile, (err, data3) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+      console.log("created NGO: ", { id: res.insertId,...data });
+      result(null, { id: res.insertId,...data });
+  });
+    }
+
+  });
+  }); 
   });
 };
 
@@ -92,7 +131,7 @@ NGO.findByMobile = (email, result) => {
 
 
 NGO.findByEmailorMobile = (data, result) => {
-  sql.query(`SELECT * FROM ngos WHERE mobile = '${data.mobile}' OR email='${data.email}'`, (err, res) => {
+  sql.query(`SELECT * FROM ngos WHERE  email='${data.email}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);

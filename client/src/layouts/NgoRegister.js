@@ -14,7 +14,7 @@ import PasswordIcon from '@material-ui/icons/Lock';
 import InfoIcon from '@material-ui/icons/Info';
 import EmailIcon from '@material-ui/icons/Email';
 import AddressIcon from '@material-ui/icons/Business'
-
+import Drop from '../components/backdrop';
 
 
 
@@ -32,7 +32,8 @@ constructor(props)
     error:null,
     access:true,
     email:null,
-    loading:false,
+    loading:true,
+    drop:false,
     mobile:null,
     Amobile:null,
     street:null,
@@ -45,7 +46,6 @@ constructor(props)
     Ecity:false,
     Engoname:false,
     Ename:false,
-    password:null,
     re_password:null,
     Epassword:false,
     Ere_password:false,
@@ -76,10 +76,13 @@ handleInputChange=(e)=> {
 
 componentDidMount=()=>{
   let query = this.useQuery();
-  const url='http://localhost:8080/api/auth/donor_register';
+  const url='http://localhost:8080/api/auth/ngo_register';
       axios.get(url,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
     .then(res=>{
-        this.setState({email:res.data.email,loading:false});
+        if(res.data.type!=="ngo")
+          this.props.history.push("/login");
+        else
+          this.setState({email:res.data.email,mobile:res.data.mobile,loading:false});
         
     })
     .catch(error=>{
@@ -88,7 +91,7 @@ componentDidMount=()=>{
         
          this.setState({error:error.response.data.message,open:true});
         setTimeout(()=>{
-         this.setState({access:false,loading:false});
+         this.props.history.push("/login");
        },3000);
       }
     });
@@ -167,9 +170,46 @@ onSubmit=(e)=>{
         return;
       }
 
-      this.setState({loading:true});
+      this.setState({drop:true});
+      this.REGISTER();
 }
 
+REGISTER=()=>{
+  let query = this.useQuery();
+  const url='http://localhost:8080/api/auth/ngo_register';
+  const data={
+    email:this.state.email,
+    name:this.state.ngoname,
+    mobile:this.state.mobile,
+    Amobile:this.state.Amobile,
+    address:{
+      street:this.state.street,
+      city:this.state.city,
+      district:this.state.district,
+      state:this.state.state,
+      pincode:this.state.pincode
+    },
+    password:this.state.password
+  }
+   axios.post(url,data,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
+    .then(res=>{
+       
+       this.setState({open:true,error:"Registration Complete!"});
+       localStorage.setItem("jwt", res.data.jwt);
+       localStorage.setItem("ngo",JSON.stringify(res.data.ngo));
+       localStorage.setItem("type","ngo");
+
+        setTimeout(()=>{
+            this.setState({drop:false});
+          this.props.history.push("/dashboard");
+        },2000);
+        
+    })
+    .catch(error=>{
+      console.log(error);
+         this.setState({drop:false,error:"Something went wrong!",open:true});
+    });
+}
   
 Details=()=>{
    if(this.state.ngoname===null || this.state.ngoname==="")
@@ -272,7 +312,7 @@ addressDetails=()=>{
 render(){
   let query = this.useQuery();
 
-const { classes } = this.props;
+
 
   if(query.get("token")===undefined || query.get("token")===null || query.get("token")==="")
     return <Redirect to="/login"/>;
@@ -318,6 +358,7 @@ const { classes } = this.props;
         message={this.state.error}
       />
       </Container>
+      <Drop drop={this.state.drop}/>
       </div>
       );
   

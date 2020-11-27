@@ -1,32 +1,22 @@
 import React,{useState} from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles,withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import donor from '../assets/donor.jpeg'
 import donor_check from '../assets/donor_check.jpeg'
 import ngo from '../assets/ngo.jpeg'
 import ngo_check from '../assets/ngo_check.jpeg'
 import './style.css'
 import Signup from '../components/signup';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
+import Drop from '../components/backdrop';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import axios from 'axios';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -70,6 +60,12 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const CssTextField = withStyles({
   root: {
     '& label.Mui-focused': {
@@ -104,13 +100,112 @@ const CssTextField = withStyles({
 
 
 
-export default function LOGIN() {
+
+export default function LOGIN({history}) {
   const classes = useStyles();
 
   const [dS,setDS]=useState(false);
   const [ngoS,setNGOS]=useState(false);
   const [modal,setModal]=useState(false);
+  const [open,setOpen]=useState(false);
+  const [message,setMessage]=useState(null);
+  const [drop,setDrop]=useState(false);
+  const [type,setType]=useState("error");
+  const [email,setEmail]=useState(undefined);
+  const [Eemail,setEEmail]=useState(false);
+  const [password,setPassword]=useState(undefined);
+  const [Epassword,setEPassword]=useState(false);
   
+function LOGIN(e)
+{
+    e.preventDefault();
+  if(email===undefined || email==="")
+  {
+      setEEmail(true);
+      setEPassword(false);
+      setOpen(true);
+      setMessage("Enter All Details!");
+      setType("error");
+      return;
+  }
+
+   if(password===undefined || password==="")
+  {
+      setEPassword(true);
+      setEEmail(false);
+      setOpen(true);
+      setMessage("Enter All Details!");
+      setType("error");
+      return;
+  }
+
+
+  if(!dS && !ngoS)
+  {   
+      setEPassword(false);
+      setEEmail(false);
+      setOpen(true);
+      setMessage("Select Login Type!");
+      setType("error");
+      return;
+  }
+
+  
+    DONOR_NGO(email,password);
+  
+
+}
+
+
+function DONOR_NGO(email,password)
+{
+  setDrop(true);
+  var url=null;
+  if(dS)
+  {
+     url="http://localhost:8080/api/auth/donor_login";
+  }
+  else
+  {
+      url="http://localhost:8080/api/auth/ngo_login";
+  }
+  
+  
+   axios.post(url,{email:email,password:password},{headers:{'Content-Type': 'application/json'}})
+    .then(res=>{
+        setType("success");
+        setOpen(true);
+        setMessage(res.data.message);
+        setEEmail(false);
+        setEPassword(false);
+        setEmail("");
+        setPassword("");
+        setDS(false);
+        setNGOS(false);
+      localStorage.setItem("jwt", res.data.jwt);
+       localStorage.setItem("user",JSON.stringify(res.data.donor));
+       localStorage.setItem("type",dS?"donor":"ngo");
+
+        setTimeout(()=>{
+          setDrop(false);
+        history.push("/dashboard");
+        },2000);
+       
+       
+        
+    })
+    .catch(error=>{
+      console.log(error);
+        setDrop(false);
+        setType("error");
+        setOpen(true);
+        setEEmail(false);
+        setEPassword(false);
+        setMessage(error.response.data.message);
+    });
+}
+
+
   function donor_click(){
   	setDS(!dS);
   	setNGOS(false);
@@ -121,7 +216,10 @@ export default function LOGIN() {
   	setDS(false);
   } 
 
-
+  if(localStorage.getItem("jwt")!=null || localStorage.getItem("jwt")!=undefined)
+      {
+        history.push("/dashboard");
+      }
   return (
   	<div className="login">
     <Container component="main" maxWidth="xs" style={{paddingTop:"50px",textAlign:"center"}} >
@@ -138,11 +236,11 @@ export default function LOGIN() {
         <Grid container style={{textAlign:"center",marginTop:"30px"}}>
             <Grid item xs={6} >
              		
-       <img onClick={()=>{donor_click()}} src={dS?donor_check:donor} style={{maxWidth:"100px",maxHeight:"100px"}}/>
+       <img alt="donor" onClick={()=>{donor_click()}} src={dS?donor_check:donor} style={{maxWidth:"100px",maxHeight:"100px"}}/>
         				
             </Grid>
             <Grid item xs={6} style={{textAlign:"center"}}>
-              	 <img onClick={()=>ngo_click()} src={ngoS?ngo_check:ngo} style={{maxWidth:"100px",maxHeight:"100px"}}/>
+              	 <img  alt="ngo" onClick={()=>ngo_click()} src={ngoS?ngo_check:ngo} style={{maxWidth:"100px",maxHeight:"100px"}}/>
 
             </Grid>
           </Grid>
@@ -156,10 +254,13 @@ export default function LOGIN() {
             required
             fullWidth
             id="email"
+            onChange={(e)=>{setEmail(e.target.value)}}
             label="Email Address"
             name="email"
             autoComplete="email"
             autoFocus
+            error={Eemail}
+            helperText={Eemail?"Email is required!":null}
             size="small"
             InputLabelProps={{
             shrink: true,
@@ -170,6 +271,9 @@ export default function LOGIN() {
             margin="normal"
             required
             fullWidth
+            onChange={(e)=>{setPassword(e.target.value)}}
+            error={Epassword}
+            helperText={Epassword?"Password is required!":null}
             name="password"
             label="Password"
             type="password"
@@ -182,7 +286,7 @@ export default function LOGIN() {
           />
           <Button
             type="submit"
-         
+            onClick={LOGIN}
             variant="contained"
             color="primary"
             className={classes.submit}
@@ -209,6 +313,12 @@ export default function LOGIN() {
    
     </Container>
        <Signup modal={modal} toggle={()=>{setModal(!modal)}}/>
+       <Snackbar anchorOrigin={{ vertical:'top', horizontal:'right' }} open={open}  autoHideDuration={5000} onClose={()=>{setOpen(false)}} >
+        <Alert  severity={type}>
+          {message}
+        </Alert>
+      </Snackbar>
+      <Drop drop={drop}/>
     </div>
   );
 }
