@@ -15,8 +15,7 @@ function App() {
       <Route exact path="/login" render={(props)=><LOGIN history={props.history}/>} />
       <Route exact path="/donor" component={DonorRegister}/>
       <Route exact path="/ngo" component={NgoRegister}/>
-      <Route exact path="/dashboard" component={Dashboard}/>
-    
+      <Route path="/dashboard" component={Dashboard}/>
       <Redirect to="/login"/>
     </Switch>
   </Router>
