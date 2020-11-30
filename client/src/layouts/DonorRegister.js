@@ -152,7 +152,7 @@ REGISTER=()=>{
        this.setState({open:true,error:"Registration Complete!"});
        localStorage.setItem("jwt", res.data.jwt);
        localStorage.setItem("donor",JSON.stringify(res.data.donor));
-       localStorage.setItem("type","donor");
+       localStorage.setItem(atob("type"),atob("donor"));
 
         setTimeout(()=>{
             this.setState({drop:false});

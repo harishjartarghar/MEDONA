@@ -16,7 +16,7 @@ import Drop from '../components/backdrop';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
-
+import base64 from 'base-64';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -184,10 +184,11 @@ function DONOR_NGO(email,password)
         setNGOS(false);
       localStorage.setItem("jwt", res.data.jwt);
        localStorage.setItem("user",JSON.stringify(res.data.donor));
-       localStorage.setItem("type",dS?"donor":"ngo");
+       localStorage.setItem(base64.encode("type"),base64.encode(dS?"donor":"ngo"));
 
         setTimeout(()=>{
           setDrop(false);
+          setOpen(false);
         history.push("/dashboard");
         },2000);
        
