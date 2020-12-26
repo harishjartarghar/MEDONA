@@ -1,8 +1,7 @@
 import React from 'react';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
+import {Backdrop,CircularProgress,Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -11,8 +10,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleBackdrop({drop}) {
+export default function SimpleBackdrop() {
   const classes = useStyles();
+  const { drop } = useSelector(state => state.snackbar);
   
 
   return (

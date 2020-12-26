@@ -1,25 +1,22 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import {Drawer,AppBar,Toolbar,List,Typography,Divider,ListItem,ListItemText,Tooltip} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import routes from '../utils/routes';
 import { NavLink } from "react-router-dom";
+import PowerSettingsNewOutlinedIcon from '@material-ui/icons/PowerSettingsNewOutlined';
+
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
+   
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -65,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function MiniDrawer({routes}) {
+export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -122,20 +119,33 @@ export default function MiniDrawer({routes}) {
           </IconButton>
         </div>
         <Divider />
+       
         
-        <List>
+        <List style={{marginTop:"15px"}}>
           {routes.map((item, index) => (
-          	 <NavLink
-                    to={item.layout + item.path}          
-                    key={item.name}
+            <Tooltip title={item.name} key={item.name} placement="right-end">
+          	 <Typography
+             onClick={()=>{props.history.push(item.layout + item.path)}}   
+             
                   >
-                    <ListItem button key={item.name}>
+                    <ListItem button key={item.name} style={{marginTop:"20px"}}>
 		              <ListItemIcon>{item.icon}</ListItemIcon>
 		              <ListItemText primary={item.name} />
             		</ListItem>
-                  </NavLink>
+                  </Typography>
+            </Tooltip>
             
           ))}
+          <Tooltip title="logout" placement="right-end">
+          <Typography
+             onClick={()=>{localStorage.clear();props.history.push("/login");}}   
+                  >
+                    <ListItem button key="logout" style={{marginTop:"20px"}}>
+                  <ListItemIcon><PowerSettingsNewOutlinedIcon fontSize="large"/></ListItemIcon>
+                  <ListItemText primary={"Logout"} />
+                </ListItem>
+          </Typography>
+          </Tooltip>
         </List>
 
       </Drawer>

@@ -10,6 +10,7 @@ const config = require("../config/config");
 exports.REGISTER_DONOR=async (req,res)=>{
 
 	const {email}=req.body;
+console.log(req.body);
 
 	if (!email || !email.trim()) 
        return res.status(500).json({message: 'Invalid Request !'});
@@ -56,7 +57,6 @@ exports.DONOR_VERIFY_TOKEN=(req,res)=>{
       }
   		if(!decoded)
   			return res.status(403).json({access:false,message:"URL EXPIRED"});
-      console.log(decoded);
   //checking if email is already registered
     Donor.findByEmail(decoded.email,async (err, data) => {
     if (err)
@@ -143,6 +143,38 @@ exports.LOGIN_DONOR=async (req,res)=>{
   });
 
   
+}
+
+exports.PASSWORD_DONOR=async (req,res)=>{
+      //hashing password
+     const salt=await bcrypt.genSalt(12);
+     const hashedpassword=await bcrypt.hash(req.body.password,salt);
+
+      //checking if email is already registered
+    Donor.PasswordById({password:hashedpassword,id:req.donor.id},async (err, data) => {
+    if (err)
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    return res.status(201).json({message:"success"});
+  });
+
+}
+
+exports.PROFILE_DONOR=async (req,res)=>{
+    const donor={name:req.body.name,mobile:req.body.mobile,city:req.body.city,id:req.donor.id}
+
+      //checking if email is already registered
+    Donor.updateById(donor,async (err, data) => {
+    if (err)
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    return res.status(201).json(data);
+  });
+
 }
 
 

@@ -1,7 +1,8 @@
 
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-
+import DonorAccount from '../components/Donoraccount';
+import {Container}from '@material-ui/core';
 
 
 
@@ -27,7 +28,7 @@ class Account extends React.Component {
 
     return (
       <div>
-       Account
+         <DonorAccount/>
       </div>
     );
   }

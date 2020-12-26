@@ -1,22 +1,17 @@
 import React,{useState} from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import {Button,TextField,Link,Grid,Typography,Snackbar,Paper,Container} from '@material-ui/core';
 import { makeStyles,withStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import donor from '../assets/donor.jpeg'
 import donor_check from '../assets/donor_check.jpeg'
 import ngo from '../assets/ngo.jpeg'
 import ngo_check from '../assets/ngo_check.jpeg'
 import './style.css'
 import Signup from '../components/signup';
-import Drop from '../components/backdrop';
-import MuiAlert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
-import axios from 'axios';
-import base64 from 'base-64';
+import { useDispatch,useSelector } from "react-redux";
+import {DONOR_LOGIN,NGO_LOGIN} from '../redux/actions/authActions';
+import {showSnackbarAction} from '../redux/actions/snackbarAction';
+import { connect  } from 'react-redux';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,149 +57,44 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const CssTextField = withStyles({
-  root: {
-    '& label.Mui-focused': {
-      color: 'white',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'white',
-      color:"white",
-      background:'white',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'white',
-         color:"white",
-         background:'white',
-      },
-      '&:hover fieldset': {
-        borderColor: 'white',
-         color:"white",
-         background:'white',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'white',
-        background:'white',
-         color:"white"
-      },
-    },
-  },
-})(TextField);
 
 
 
 
 
 
-export default function LOGIN({history}) {
+function LOGIN(props) {
+
+  const dispatch = useDispatch()
   const classes = useStyles();
+  const { signupModal } = useSelector(state => state.snackbar);
+
 
   const [dS,setDS]=useState(false);
   const [ngoS,setNGOS]=useState(false);
-  const [modal,setModal]=useState(false);
-  const [open,setOpen]=useState(false);
-  const [message,setMessage]=useState(null);
-  const [drop,setDrop]=useState(false);
-  const [type,setType]=useState("error");
-  const [email,setEmail]=useState(undefined);
+  const [email,setEmail]=useState("");
   const [Eemail,setEEmail]=useState(false);
-  const [password,setPassword]=useState(undefined);
+  const [password,setPassword]=useState("");
   const [Epassword,setEPassword]=useState(false);
   
 function LOGIN(e)
 {
-    e.preventDefault();
-  if(email===undefined || email==="")
-  {
-      setEEmail(true);
-      setEPassword(false);
-      setOpen(true);
-      setMessage("Enter All Details!");
-      setType("error");
-      return;
-  }
+  e.preventDefault();
 
-   if(password===undefined || password==="")
-  {
-      setEPassword(true);
-      setEEmail(false);
-      setOpen(true);
-      setMessage("Enter All Details!");
-      setType("error");
-      return;
-  }
+  if(email===""){setEEmail(true);setEPassword(false);props.Alert("Email is required!","error");return;}
 
+  if(password===""){setEPassword(true);setEEmail(false);props.Alert("Password is required!","error");return;}
 
-  if(!dS && !ngoS)
-  {   
-      setEPassword(false);
-      setEEmail(false);
-      setOpen(true);
-      setMessage("Select Login Type!");
-      setType("error");
-      return;
-  }
+  if(!dS && !ngoS){setEPassword(false);setEEmail(false);props.Alert("Select Login Type","error");return;}
 
-  
-    DONOR_NGO(email,password);
-  
-
-}
-
-
-function DONOR_NGO(email,password)
-{
-  setDrop(true);
-  var url=null;
   if(dS)
-  {
-     url="http://localhost:8080/api/auth/donor_login";
-  }
+    {props.Donor_Login(email,password,props);}
   else
-  {
-      url="http://localhost:8080/api/auth/ngo_login";
-  }
-  
-  
-   axios.post(url,{email:email,password:password},{headers:{'Content-Type': 'application/json'}})
-    .then(res=>{
-        setType("success");
-        setOpen(true);
-        setMessage(res.data.message);
-        setEEmail(false);
-        setEPassword(false);
-        setEmail("");
-        setPassword("");
-        setDS(false);
-        setNGOS(false);
-      localStorage.setItem("jwt", res.data.jwt);
-       localStorage.setItem("user",JSON.stringify(res.data.donor));
-       localStorage.setItem(base64.encode("type"),base64.encode(dS?"donor":"ngo"));
-
-        setTimeout(()=>{
-          setDrop(false);
-          setOpen(false);
-        history.push("/dashboard");
-        },2000);
-       
-       
-        
-    })
-    .catch(error=>{
-      console.log(error);
-        setDrop(false);
-        setType("error");
-        setOpen(true);
-        setEEmail(false);
-        setEPassword(false);
-        setMessage(error.response.data.message);
-    });
+    {props.Ngo_Login(email,password,props);}
 }
+
+
+
 
 
   function donor_click(){
@@ -219,14 +109,14 @@ function DONOR_NGO(email,password)
 
   if(localStorage.getItem("jwt")!=null || localStorage.getItem("jwt")!=undefined)
       {
-        history.push("/dashboard");
+        props.history.push("/dashboard");
       }
   return (
   	<div className="login">
     <Container component="main" maxWidth="xs" style={{paddingTop:"50px",textAlign:"center"}} >
      
       
-      <Container component="main" maxWidth="xs" style={{backgroundColor:"rgba(255,255,255, 0.5)",borderRadius:"10px"}}>
+      <Container component="main" maxWidth="xs" style={{backgroundColor:"rgba(0,0,0, 0.5)",borderRadius:"10px"}}>
       
       
       <div className={classes.paper}>
@@ -248,7 +138,7 @@ function DONOR_NGO(email,password)
        
        
         <form className={classes.form} noValidate>
-
+    
           <TextField
             variant="outlined"
             margin="normal"
@@ -267,8 +157,9 @@ function DONOR_NGO(email,password)
             shrink: true,
           }}
           />
+          
           <TextField
-            variant="outlined"
+            variant="filled"
             margin="normal"
             required
             fullWidth
@@ -301,7 +192,7 @@ function DONOR_NGO(email,password)
               </Link>
             </Grid>
             <Grid item xs={12} style={{textAlign:"center",margin:"20px 0px"}}>
-              <Link  variant="body2" onClick={()=>{setModal(true)}}>
+              <Link style={{cursor: "pointer"}}  variant="body2" onClick={() => dispatch({ type: 'TOGGLE_MODAL' })}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -313,13 +204,18 @@ function DONOR_NGO(email,password)
 
    
     </Container>
-       <Signup modal={modal} toggle={()=>{setModal(!modal)}}/>
-       <Snackbar anchorOrigin={{ vertical:'top', horizontal:'right' }} open={open}  autoHideDuration={5000} onClose={()=>{setOpen(false)}} >
-        <Alert  severity={type}>
-          {message}
-        </Alert>
-      </Snackbar>
-      <Drop drop={drop}/>
+       <Signup/>
     </div>
   );
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+return{
+    Donor_Login:(email,password,props)=>{dispatch(DONOR_LOGIN(email,password,"donor",props))},
+    Ngo_Login:(email,password,props)=>{dispatch(NGO_LOGIN(email,password,"ngo",props))},
+    Alert:(message,type)=>{dispatch(showSnackbarAction(message,type))},
+}
+}
+
+export default connect(null,mapDispatchToProps)(LOGIN);

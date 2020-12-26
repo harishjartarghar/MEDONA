@@ -14,5 +14,6 @@
 	background: url("https://onlinepithoragarh.in/wp-content/uploads/2018/04/Kalpasi-Medical-Store-Pithoragarh-1.jpeg")  ;
 	background-repeat: no-repeat;
 	background-size: cover;
+	height: inherit;
 }
 

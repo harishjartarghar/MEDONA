@@ -1,20 +1,22 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import routes from '../routes';
 import Sidebar from '../components/sidebar';
 import { Route, Switch, Redirect } from "react-router-dom";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import New_Donation from '../components/NewDonation'
+import routes from '../utils/routes';
+import { useDispatch,useSelector ,connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#d5fefd',
+    backgroundImage: 'linear-gradient(310deg, #d5fefd 0%, #fffcff 85%);',
     position: 'relative',
- 
+    height:"inherit"
   }
 ,
   toolbar: {
@@ -30,20 +32,26 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   fab: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: theme.spacing(5),
     right: theme.spacing(5),
   },
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
+const dispatch = useDispatch()
+ 
 
+   if(!localStorage.getItem("jwt"))
+    {
+        props.history.push("/login");
+    }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-     <Sidebar routes={routes}/>
+     <Sidebar {...props}/>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
@@ -62,11 +70,11 @@ export default function Dashboard() {
           </Switch>
       </main>
       <Tooltip title="Donate Medicine" aria-label="add" arrow>
-      <Fab color="primary"  className={classes.fab} aria-label="add">
+      <Fab color="primary"  className={classes.fab} aria-label="add" onClick={() => dispatch({ type: 'DONATION_MODAL' })}>
   			<AddIcon />
 	  </Fab>
 	  </Tooltip>
-      
+     <New_Donation/> 
     </div>
   );
 }
