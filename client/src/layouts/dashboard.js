@@ -9,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import New_Donation from '../components/NewDonation'
 import routes from '../utils/routes';
 import { useDispatch,useSelector ,connect} from "react-redux";
+import base64 from 'base-64';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,6 +57,7 @@ const dispatch = useDispatch()
         <div className={classes.toolbar} />
         <Switch>
             {routes.map((prop, key) => {
+            if(prop.type===base64.decode(localStorage.getItem(base64.encode("type"))))
              return   (
                 <Route
                   exact
@@ -66,15 +68,20 @@ const dispatch = useDispatch()
                 />
               );
             })}
-            <Redirect to="/dashboard"/>
+            <Redirect to="/dashboard/store"/>
           </Switch>
       </main>
-      <Tooltip title="Donate Medicine" aria-label="add" arrow>
-      <Fab color="primary"  className={classes.fab} aria-label="add" onClick={() => dispatch({ type: 'DONATION_MODAL' })}>
-  			<AddIcon />
-	  </Fab>
-	  </Tooltip>
-     <New_Donation/> 
+      {
+        "donor"===base64.decode(localStorage.getItem(base64.encode("type")))?
+        <>
+        <Tooltip title="Donate Medicine" aria-label="add" arrow>
+             <Fab color="primary"  className={classes.fab} aria-label="add" onClick={() => dispatch({ type: 'DONATION_MODAL' })}>
+               <AddIcon />
+           </Fab>
+        </Tooltip>
+        <New_Donation/>
+        </>:null
+      } 
     </div>
   );
 }

@@ -272,7 +272,7 @@ function onSubmit()
               />
             </Grid>
 
-           {edit?<> <Grid item xs={6} style={{textAlign:"center",margin:"auto"}}>
+           {item.remaining>0?edit?<> <Grid item xs={6} style={{textAlign:"center",margin:"auto"}}>
                        <Tooltip title="Edit">
                           <EditIcon fontSize="large" style={{color:"orange",margin:"auto"}} onClick={()=>{setEdit(false)}}/> 
                        </Tooltip>
@@ -281,22 +281,22 @@ function onSubmit()
            
                        <Grid item xs={6} style={{textAlign:"center"}}>
                        <Tooltip title="Delete">
-                         	<DeleteIcon fontSize="large" style={{color:"red"}} onClick={()=>{toggle();props.Delete_Donation(item._id)}}/>
-                      	</Tooltip>
+                          <DeleteIcon fontSize="large" style={{color:"red"}} onClick={()=>{toggle();props.Delete_Donation(item._id)}}/>
+                        </Tooltip>
                        </Grid>
                        </>:
                        <>
                      <Grid item xs={12} style={{textAlign:"center",margin:"auto"}}>
                         <Button size="small"  variant="contained" color="secondary" onClick={onSubmit} >
-				              update
-				            </Button>
+                      update
+                    </Button>
                        </Grid>
                      <Grid item xs={12} style={{textAlign:"center",margin:"auto"}}>
                         <Button size="small"  variant="contained" onClick={()=>{setEdit(true)}}>
-				              cancel
-				            </Button>
+                      cancel
+                    </Button>
                        </Grid>
-                       </>
+                       </>:null
                    }
 
             

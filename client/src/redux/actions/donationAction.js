@@ -107,3 +107,22 @@ export const DELETE_DONATION=(id)=>{
         
     }
 }
+
+export const GET_ALL_DONATIONS=(data)=>{
+    return (dispatch,getState)=>{
+        axios.get(BASE_URL+'/donate_all',{headers:{'Content-Type': 'application/json','token':localStorage.getItem("jwt")}})
+    .then(res=>{
+       dispatch({type:'GET_DONATIONS',donations:res.data}); 
+        
+    })
+    .catch(error=>{
+       dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"Something went wrong! Reload",snackbarType:"error"});
+               setTimeout(()=>{
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+    });
+        
+    }
+}

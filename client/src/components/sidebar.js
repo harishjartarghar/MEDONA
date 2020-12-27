@@ -10,6 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import routes from '../utils/routes';
 import { NavLink } from "react-router-dom";
 import PowerSettingsNewOutlinedIcon from '@material-ui/icons/PowerSettingsNewOutlined';
+import base64 from 'base-64';
 
 
 const drawerWidth = 240;
@@ -122,20 +123,22 @@ export default function MiniDrawer(props) {
        
         
         <List style={{marginTop:"15px"}}>
-          {routes.map((item, index) => (
-            <Tooltip title={item.name} key={item.name} placement="right-end">
-          	 <Typography
+          {routes.map((item, index) =>{
+            if(item.type===base64.decode(localStorage.getItem(base64.encode("type"))))
+              return (
+                <Tooltip title={item.name} key={item.name} placement="right-end">
+             <Typography
              onClick={()=>{props.history.push(item.layout + item.path)}}   
              
                   >
                     <ListItem button key={item.name} style={{marginTop:"20px"}}>
-		              <ListItemIcon>{item.icon}</ListItemIcon>
-		              <ListItemText primary={item.name} />
-            		</ListItem>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.name} />
+                </ListItem>
                   </Typography>
             </Tooltip>
-            
-          ))}
+                );
+          } )}
           <Tooltip title="logout" placement="right-end">
           <Typography
              onClick={()=>{localStorage.clear();props.history.push("/login");}}   

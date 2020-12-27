@@ -9,7 +9,7 @@ if (req.file) {
 	try{
 		
 		const result=await uploadImage(req.file);
-		newMedicine=new Medicine({donor_id:req.donor.id,url:result.url,...req.body});
+		newMedicine=new Medicine({donor_id:req.donor.id,url:result.url,remaining:req.body.quantity,sold:0,...req.body});
 	}catch(error)
 	{
   		res.status(500).json({message:"something went wrong!"});
@@ -17,7 +17,7 @@ if (req.file) {
 	}  
       
   } else { 
-    newMedicine=new Medicine({donor_id:req.donor.id,...req.body});
+    newMedicine=new Medicine({donor_id:req.donor.id,remaining:req.body.quantity,sold:0,...req.body});
   }
   
 
@@ -45,5 +45,10 @@ exports.DELETE_DONATION=async (req,res)=>{
 
 exports.GET_DONATIONS=async (req,res)=>{
   const donations=await Medicine.find({donor_id:req.donor.id}).sort({"_id":-1});
+  return res.json(donations);
+}
+
+exports.GET_ALL_DONATIONS=async (req,res)=>{
+  const donations=await Medicine.find({}).sort({"_id":-1});
   return res.json(donations);
 }

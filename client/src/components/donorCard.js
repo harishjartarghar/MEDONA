@@ -65,7 +65,7 @@ export default function MediaControlCard({data}) {
         
         className={classes.cover}
         image={data.url}
-        title="Live from space album cover"
+        title="Medicine Image"
       />
     </Card>
   );
