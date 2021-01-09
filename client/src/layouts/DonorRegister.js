@@ -64,7 +64,7 @@ handleInputChange=(e)=> {
 
 componentDidMount=()=>{
   let query = this.useQuery();
-  const url='http://localhost:8080/api/auth/donor_register';
+  const url='/api/auth/donor_register';
       axios.get(url,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
     .then(res=>{
       if(res.data.type!=="donor")
@@ -138,7 +138,7 @@ onSubmit=(e)=>{
 
 REGISTER=()=>{
   let query = this.useQuery();
-  const url='http://localhost:8080/api/auth/donor_register'
+  const url='/api/auth/donor_register'
   const data={
     email:this.state.email,
     name:this.state.firstName+" "+this.state.lastName,
