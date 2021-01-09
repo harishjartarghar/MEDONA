@@ -272,7 +272,7 @@ function onSubmit()
               />
             </Grid>
 
-           {item.remaining>0?edit?<> <Grid item xs={6} style={{textAlign:"center",margin:"auto"}}>
+           {item.sold==0?edit?<> <Grid item xs={6} style={{textAlign:"center",margin:"auto"}}>
                        <Tooltip title="Edit">
                           <EditIcon fontSize="large" style={{color:"orange",margin:"auto"}} onClick={()=>{setEdit(false)}}/> 
                        </Tooltip>

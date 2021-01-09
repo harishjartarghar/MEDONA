@@ -1,6 +1,7 @@
 import MY_DONATIONS from '../views/donations.js';
 import Store from '../views/store.js';
 import Cart from '../views/cart.js';
+import Order from '../views/order.js';
 import Donor_Account from '../views/account.js';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import AppsIcon from '@material-ui/icons/Apps';
@@ -46,7 +47,7 @@ var routes = [
     path: "/Orders",
     name: "My Orders",
     icon: <PlayArrowIcon fontSize="large"/>,
-    component: Donor_Account,
+    component: Order,
     layout: "/dashboard",
     type:'ngo',
   },

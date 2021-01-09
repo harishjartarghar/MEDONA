@@ -33,5 +33,23 @@ Address.create = (newAddress, result) => {
   });
 };
 
+Address.findById = (id, result) => {
+  sql.query(`SELECT * FROM address WHERE id = ${id}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found donor: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Donor with the id
+    result({ kind: "not_found" }, null);
+  });
+};
 
 module.exports = Address;

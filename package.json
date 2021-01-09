@@ -1,0 +1,27 @@
+{
+  "name": "medona",
+  "version": "1.0.0",
+  "description": "Medicine Donation System",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm start --prefix client",
+    "dev-server": "npm run dev-server --prefix server",
+    "server": "npm run server --prefix server",
+    "dev": "concurrently \"npm run client\" \"npm run dev-server\" ",
+    "start": "npm run server",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix server && npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harishjartarghar/MEDONA.git"
+  },
+  "author": "harishjartarghar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harishjartarghar/MEDONA/issues"
+  },
+  "homepage": "https://github.com/harishjartarghar/MEDONA#readme",
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

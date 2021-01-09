@@ -29,4 +29,23 @@ Mobile.create = (newMobile, result) => {
   });
 };
 
+Mobile.findById = (id, result) => {
+  sql.query(`SELECT * FROM mobiles WHERE ngo_id = ${id}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found donor: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found Donor with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
 module.exports = Mobile;

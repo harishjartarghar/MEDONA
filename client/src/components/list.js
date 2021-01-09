@@ -96,12 +96,12 @@ function Minus(){
             </React.Fragment>
           }
         />
-            <ListItemSecondaryAction>
-               <IconButton aria-label="add to favorites" key={data._id}>
+            <ListItemSecondaryAction key={data._id}>
+               <IconButton aria-label="add to favorites">
                           <AddIcon onClick={Add}/>
                 </IconButton>
                         {qty}
-                <IconButton aria-label="add to favorites"  key={data._id}>
+                <IconButton aria-label="add to favorites"  >
                   <RemoveIcon onClick={Minus}/>
                 </IconButton>
             </ListItemSecondaryAction>

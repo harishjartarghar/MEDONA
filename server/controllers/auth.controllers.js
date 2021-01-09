@@ -1,5 +1,6 @@
 const Donor = require("../model/donor.model");
 const Ngo = require("../model/ngo.model");
+const Mobile = require("../model/mobile.model");
 const bcrypt = require('bcryptjs');
 const { verify_subject, verify_template,ngo_verify_template,ngo_verify_subject } = require("../config/mailtemplate");
 const jwt = require('jsonwebtoken');
@@ -311,7 +312,14 @@ exports.LOGIN_NGO=async (req,res)=>{
     const token=jwt.sign({id:data.id},config.JWT_SECRET); 
     data.password=null;
 
-    return res.status(201).json({jwt:token,donor:data,message:"Login Success"});
+    Mobile.findById(data.id,async (err, result) => {
+      console.log("mobile",result[0].mobile)
+      const mobile=result[0]?result[0].mobile:null;
+      const alternate=result[1]?result[1].mobile:null;
+        return res.status(201).json({jwt:token,donor:{...data,mobile:mobile,alternate:alternate},message:"Login Success"});
+    });
+
+    
   });
 
   

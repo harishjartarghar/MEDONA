@@ -36,7 +36,8 @@ gradient(135deg, rgb(149, 18, 122) 0%, rgb(149, 18, 122) 25%, rgb(182,
   },
   tool:{
   	background:'linear-gradient(to right, #141562, #486FBC, #EAB5A1, #8DD6FF, #4973C9, #D07CA7, #F4915E, #F5919E, #B46F89, #141562, #486FBC);background-size: 1000% 1000%;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);'
-  }
+  },
+  
 }));
 
 export default function MenuAppBar() {
@@ -47,11 +48,7 @@ export default function MenuAppBar() {
      		
      		<AppBar color="secondary">
 			  
-			    <Toolbar className={classes.tool}>
-			    <Typography className={classes.title}>
-			      MEDONA
-			    </Typography>
-			   </Toolbar>
+			
 			  
 			</AppBar>
      		

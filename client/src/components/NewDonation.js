@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import {Slide,CssBaseline,TextField,FormControlLabel,Checkbox,Grid,Container} from '@material-ui/core';
 import AutoComplete from './autocomplete';
-import {Medicine} from '../assets/data';
+import {Medicine,Category} from '../assets/data';
 import {NEW_DONATION} from '../redux/actions/donationAction';
 import {showSnackbarAction} from '../redux/actions/snackbarAction';
 import { useDispatch,useSelector ,connect} from "react-redux";
@@ -171,7 +171,7 @@ function onSubmit()
             </Grid>
             
             <Grid item xs={12}>
-              <AutoComplete error={Ecategory} label="Category" onInput={setCategory} list={Medicine} category={true} />
+              <AutoComplete error={Ecategory} label="Category" onInput={setCategory} list={Category} category={true} />
             </Grid>
             <Grid item xs={12} sm={6}>
                <TextField

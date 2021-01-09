@@ -33,6 +33,19 @@ Donor.create = (newDonor, result) => {
   });
 };
 
+
+Donor.count = (result) => {
+  sql.query("SELECT count(*) FROM donors", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    result(null, res);
+  });
+};
+
 Donor.findById = (donorId, result) => {
   sql.query(`SELECT * FROM donors WHERE id = ${donorId}`, (err, res) => {
     if (err) {

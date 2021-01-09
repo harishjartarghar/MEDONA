@@ -10,10 +10,14 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
+import donated from '../assets/donated.jpeg'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    backgroundImage:donated,
+
+    
   },
   details: {
     display: 'flex',
@@ -23,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flex: '1 0 auto',
     width: 151,
+    
   },
   cover: {
     width: 151,
@@ -45,16 +50,21 @@ export default function MediaControlCard({data}) {
 
   return (
     <Card className={classes.root}>
-      <div className={classes.details}>
+       {data.sold===data.quantity?<img class="card-img-top watermarked" src={donated} alt="" />:null}
+      <div className={classes.details} >
        <Tooltip title="click for more info">
-        <CardContent className={classes.content} >
+      
+        <CardContent className={classes.content}  >
           <Typography component="h5" variant="h5">
            {data.name}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
             {data.category}
           </Typography>
-           Expiry:{ moment(data.expiry).format("DD-MM-YYYY")}
+           <p>Expiry:{ moment(data.expiry).format("DD-MM-YYYY")}</p>
+           <p>Total:{data.quantity}</p>
+           <p>Donated:{data.sold}</p>
+           Remaining:{data.remaining}
         </CardContent>
         </Tooltip>
         <div className={classes.controls}>

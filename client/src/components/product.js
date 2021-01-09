@@ -137,15 +137,15 @@ function Minus(){
 
         	cart.find(item=>(item._id===data._id && item.qty>0))?
                 
-                	<>
-                			 <IconButton aria-label="add to favorites" key={data._id}>
+                	<div key={data._id}>
+                			 <IconButton aria-label="add to favorites" >
                           <AddIcon onClick={Add}/>
                         </IconButton>
                         {cart.find(item=>(item._id===data._id && item.qty>0))["qty"]}
-                        <IconButton aria-label="add to favorites"  key={data._id}>
+                        <IconButton aria-label="add to favorites"  >
                           <RemoveIcon onClick={Minus}/>
                         </IconButton>
-                        </>
+                        </div>
                 
                 :
                 	<IconButton aria-label="add to favorites">

@@ -182,7 +182,6 @@ export const DONOR_PASSWORD=(password,props)=>{
 export const NGO_LOGIN=(email,password,type,props)=>{
     return (dispatch,getState)=>{
          dispatch({type:'TOGGLE_DROP'});
-         alert("hello")
             axios.post(BASE_URL+'/auth/ngo_login',{email,password},{headers:{'Content-Type': 'application/json'}})
             .then(res=>{
                 localStorage.setItem("jwt", res.data.jwt);
@@ -190,7 +189,7 @@ export const NGO_LOGIN=(email,password,type,props)=>{
                 localStorage.setItem(base64.encode("type"),base64.encode(type));
 
                 props.history.push('/dashboard');
-                dispatch({type:'LOGIN_SUCCESS',...res.data});
+                dispatch({type:'LOGIN_SUCCESS',token:res.data.jwt,user:res.data.donor});
                 dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"LOGIN SUCCUESS",snackbarType:"success"});
               
                setTimeout(()=>{

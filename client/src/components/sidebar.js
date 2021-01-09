@@ -11,7 +11,11 @@ import routes from '../utils/routes';
 import { NavLink } from "react-router-dom";
 import PowerSettingsNewOutlinedIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import base64 from 'base-64';
-
+import InputBase from '@material-ui/core/InputBase';
+import { fade } from '@material-ui/core/styles';
+import {SEARCH} from '../redux/actions/donationAction';
+import SearchIcon from '@material-ui/icons/Search';
+import { useDispatch,useSelector ,connect} from "react-redux";
 
 const drawerWidth = 240;
 
@@ -60,10 +64,56 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9) + 1,
     },
-  }
+  },
+  title: {
+    flexGrow: 1,
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.black, 0.5),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
 }));
 
-export default function MiniDrawer(props) {
+function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -96,9 +146,25 @@ export default function MiniDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" noWrap>
             MEDONA
           </Typography>
+          {props.history.location.pathname==="/dashboard/store"?<div className={classes.search}>
+                      <div className={classes.searchIcon}>
+                        <SearchIcon />
+                      </div>
+                      <InputBase
+                      onChange={(e)=>{props.Search(e.target.value,props.donation.all)}}
+                        placeholder="Search…"
+                        classes={{
+                          root: classes.inputRoot,
+                          input: classes.inputInput,
+                        }}
+                        inputProps={{ 'aria-label': 'search' }}
+                      />
+                    </div>:null}
+          
+        
         </Toolbar>
       </AppBar>
       <Drawer
@@ -156,3 +222,18 @@ export default function MiniDrawer(props) {
     </div>
   );
 }
+
+const mapDispatchToProps=(dispatch)=>{
+return{
+   Search:(data,donation)=>{dispatch(SEARCH(data,donation))},
+}
+}
+
+const mapStatetoProps=(state)=>{
+    return{
+      donation:state.donation,
+      auth:state.auth
+    }
+}
+
+export default connect(mapStatetoProps,mapDispatchToProps)(MiniDrawer);

@@ -13,6 +13,8 @@ import { connect  } from 'react-redux';
 import Drop from '../components/backdrop';
 import axios from 'axios';
 import {showSnackbarAction} from '../redux/actions/snackbarAction';
+import base64 from 'base-64';
+import { useSelector, useDispatch } from "react-redux";
 
 
 
@@ -148,8 +150,10 @@ REGISTER=()=>{
     .then(res=>{
         this.props.Alert("Registration Complete!","success")
        localStorage.setItem("jwt", res.data.jwt);
-       localStorage.setItem("donor",JSON.stringify(res.data.donor));
-       localStorage.setItem(atob("type"),atob("donor"));
+       localStorage.setItem("user",JSON.stringify(res.data.donor));
+       localStorage.setItem(base64.encode("type"),base64.encode("donor"));
+       this.props.login(res.data.jwt,res.data.donor);
+       
 
         setTimeout(()=>{
             this.setState({drop:false});
@@ -265,6 +269,7 @@ render(){
 const mapDispatchToProps=(dispatch)=>{
 return{
     Alert:(message,type)=>{dispatch(showSnackbarAction(message,type))},
+    login:(token,data)=>{dispatch({type:'LOGIN_SUCCESS',token:token,user:data});}
 }
 }
 

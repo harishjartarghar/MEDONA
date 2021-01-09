@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     
     height:"50%",
     textAlign:"center",
-    background:"rgb(f,f,f,f.4)",
 
   },
   bullet: {
@@ -116,7 +115,7 @@ function LOGIN(e)
     <Container component="main" maxWidth="xs" style={{paddingTop:"50px",textAlign:"center"}} >
      
       
-      <Container component="main" maxWidth="xs" style={{backgroundColor:"rgba(0,0,0, 0.5)",borderRadius:"10px"}}>
+      <Container component="main" maxWidth="xs" style={{backgroundColor:"white",border:"5px solid black",borderRadius:"10px"}}>
       
       
       <div className={classes.paper}>
@@ -140,7 +139,7 @@ function LOGIN(e)
         <form className={classes.form} noValidate>
     
           <TextField
-            variant="outlined"
+            variant="filled"
             margin="normal"
             required
             fullWidth
@@ -186,11 +185,6 @@ function LOGIN(e)
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs={12} style={{textAlign:"center"}}>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item xs={12} style={{textAlign:"center",margin:"20px 0px"}}>
               <Link style={{cursor: "pointer"}}  variant="body2" onClick={() => dispatch({ type: 'TOGGLE_MODAL' })}>
                 {"Don't have an account? Sign Up"}
