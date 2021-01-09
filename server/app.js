@@ -49,7 +49,7 @@ app.use('/api/auth',require('./routes/auth.routes'));
 app.use('/api/',require('./routes/index.routes'));
 
 
-app.use(express.static(path.join(__dirname ,"/client","/build")));
+app.use(express.static(path.join(__dirname, "..","/client","/build")));
 
 if (process.env.NODE_ENV == 'production') {
 app.get("*",(req,res)=>{
