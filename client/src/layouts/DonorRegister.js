@@ -3,17 +3,18 @@ import {Redirect} from "react-router-dom";
 import Stepper from '../components/stepper';
 import DetailForm from '../components/DetailForm';
 import SET_PASSWORD from '../components/setPassword';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
+import {Button,Container} from '@material-ui/core';
 import AppBar from '../components/AppBar';
-import axios from 'axios';
-import Snackbar from '@material-ui/core/Snackbar';
 import './style.css'
 import PasswordIcon from '@material-ui/icons/Lock';
 import InfoIcon from '@material-ui/icons/Info';
 import EmailIcon from '@material-ui/icons/Email';
+import { connect  } from 'react-redux';
 import Drop from '../components/backdrop';
-
+import axios from 'axios';
+import {showSnackbarAction} from '../redux/actions/snackbarAction';
+import base64 from 'base-64';
+import { useSelector, useDispatch } from "react-redux";
 
 
 
@@ -75,8 +76,7 @@ componentDidMount=()=>{
     .catch(error=>{
       if(error.response.status===403)
       { 
-        
-         this.setState({error:error.response.data.message,open:true});
+        this.props.Alert(error.response.data.message,"error")
         setTimeout(()=>{
          this.props.history.push("/login");
        },3000);
@@ -148,11 +148,12 @@ REGISTER=()=>{
   }
    axios.post(url,data,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
     .then(res=>{
-       
-       this.setState({open:true,error:"Registration Complete!"});
+        this.props.Alert("Registration Complete!","success")
        localStorage.setItem("jwt", res.data.jwt);
-       localStorage.setItem("donor",JSON.stringify(res.data.donor));
-       localStorage.setItem(atob("type"),atob("donor"));
+       localStorage.setItem("user",JSON.stringify(res.data.donor));
+       localStorage.setItem(base64.encode("type"),base64.encode("donor"));
+       this.props.login(res.data.jwt,res.data.donor);
+       
 
         setTimeout(()=>{
             this.setState({drop:false});
@@ -220,14 +221,7 @@ render(){
 	if(query.get("token")===undefined || query.get("token")===null || query.get("token")==="")
 		return <Redirect to="/login"/>;
   if(this.state.loading)
-    return (<div><Drop drop={true}/>
-        <Snackbar
-        anchorOrigin={{ vertical:'top', horizontal:'right' }}
-        open={this.state.open}
-        onClose={()=>{this.setState({open:false})}}
-        message={this.state.error}
-      />
-      </div>);
+    return (<div><Drop drop={true}/></div>);
   
   if(!this.state.access)
     return <Redirect to="/login"/>;
@@ -264,14 +258,7 @@ render(){
             </div>
           </div>
       </div>
-       <Snackbar
-        anchorOrigin={{ vertical:'top', horizontal:'right' }}
-        open={this.state.open}
-        onClose={()=>{this.setState({open:false})}}
-        message={this.state.error}
-      />
- 	    </Container>
-      <Drop drop={this.state.drop}/>
+      </Container>
       </div>
 			);
 	
@@ -279,5 +266,13 @@ render(){
   
 }
 
-export default DonorRegister;
+const mapDispatchToProps=(dispatch)=>{
+return{
+    Alert:(message,type)=>{dispatch(showSnackbarAction(message,type))},
+    login:(token,data)=>{dispatch({type:'LOGIN_SUCCESS',token:token,user:data});}
+}
+}
+
+export default connect(null,mapDispatchToProps)(DonorRegister);
+
 

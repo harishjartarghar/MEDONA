@@ -71,6 +71,18 @@ NGO.create = (data, result) => {
   });
 };
 
+NGO.count = (result) => {
+  sql.query("SELECT count(*) FROM ngos", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    result(null, res);
+  });
+};
+
 NGO.findById = (ngoId, result) => {
   sql.query(`SELECT * FROM ngos WHERE id = ${ngoId}`, (err, res) => {
     if (err) {

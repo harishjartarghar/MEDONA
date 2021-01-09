@@ -9,8 +9,13 @@ const {
 		REGISTER_NGO,
 		SAVE_NGO,
 		LOGIN_NGO,
+		PROFILE_DONOR,
+		PASSWORD_DONOR
 	  }=
 require('../controllers/auth.controllers');
+const {DonorVerify}=require('../middleware/auth');
+
+
 
 //Donor
 app.route("/donor_email")
@@ -24,6 +29,14 @@ app.route("/donor_register")
 //Login Donor
 app.route("/donor_login")
    .post(LOGIN_DONOR)
+
+//Login Donor
+app.route("/donor_profile")
+   .put(DonorVerify,PROFILE_DONOR)
+
+//Login Donor
+app.route("/donor_password")
+   .put(DonorVerify,PASSWORD_DONOR)
 
 //NGO
 app.route("/ngo_email")

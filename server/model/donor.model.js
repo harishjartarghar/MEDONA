@@ -33,6 +33,19 @@ Donor.create = (newDonor, result) => {
   });
 };
 
+
+Donor.count = (result) => {
+  sql.query("SELECT count(*) FROM donors", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    result(null, res);
+  });
+};
+
 Donor.findById = (donorId, result) => {
   sql.query(`SELECT * FROM donors WHERE id = ${donorId}`, (err, res) => {
     if (err) {
@@ -104,10 +117,10 @@ Donor.getAll = result => {
   });
 };
 
-Donor.updateById = (id, donor, result) => {
+Donor.updateById = (donor, result) => {
   sql.query(
-    "UPDATE donors SET email = ?, name = ?, active = ? WHERE id = ?",
-    [donor.email, donor.name, donor.active, id],
+    "UPDATE donors SET  name = ?, mobile = ?,city=? WHERE id = ?",
+    [donor.name, donor.mobile,donor.city, donor.id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -121,8 +134,31 @@ Donor.updateById = (id, donor, result) => {
         return;
       }
 
-      console.log("updated donor: ", { id: id, ...donor });
-      result(null, { id: id, ...donor });
+      console.log("updated donor: ", donor);
+      result(null, donor);
+    }
+  );
+};
+
+Donor.PasswordById = (donor, result) => {
+  sql.query(
+    "UPDATE donors SET password = ? WHERE id = ?",
+    [donor.password,donor.id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Donor with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated donor: ", { id: donor.id, ...donor });
+      result(null, { id: donor.id, ...donor });
     }
   );
 };

@@ -1,1 +1,58 @@
 
+
+.MuiAppBar-colorPrimary{
+	
+background-image: linear-gradient(45deg, rgba(0, 84, 162, 0.45) 0%, rgba(0,84, 162, 0.45) 25%, rgba(77, 60, 170, 0.45) 25%, rgba(77, 60, 170, 0.45)50%, rgba(153, 37, 179, 0.45) 50%, rgba(153, 37, 179, 0.45) 75%,rgba(230, 13, 187, 0.45) 75%, rgba(230, 13, 187, 0.45) 100%), linear-gradient(135deg, rgb(149, 18, 122) 0%, rgb(149, 18, 122) 25%, rgb(182,13, 98) 25%, rgb(182, 13, 98) 50%, rgb(214, 8, 74) 50%, rgb(214, 8, 74)75%, rgb(247, 3, 50) 75%, rgb(247, 3, 50) 100%) ;
+}
+
+
+.card-title {
+    font-weight: 300;
+    font-size: 2rem;
+}
+.product-card .card {
+    margin: 20px;
+    overflow: hidden;
+}
+.product-card .card .card-content {
+    padding: 5px;
+}
+.product-card .card .price {
+    width: 70px;
+    height: 70px;
+    font-weight: 600;
+    font-size: 1.45rem;
+    line-height: 70px;
+    margin: 10px;
+    position: absolute;
+    top: 0;
+    letter-spacing: 0;
+}
+.product-card ul.card-action-buttons {
+    margin: -18px 7px 0 0;
+    text-align: right;
+}
+.product-card ul.card-action-buttons li {
+    display: inline-block;
+    padding-left: 7px;
+}
+.product {
+    width: 20%;
+    padding: 10px;
+}
+.product .card {
+    margin: 0;
+}
+.product .card .card-content {
+    padding: 5px 10px;
+}
+
+.watermarked {
+  background-image: url("../assets/donated.jpeg");
+  position: absolute;
+  opacity: 0.5;
+  max-height: 100px;
+  max-width: 100px;
+  margin-top: 50px;
+  margin-left:20px;
+}

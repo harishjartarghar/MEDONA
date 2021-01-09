@@ -15,8 +15,9 @@ import InfoIcon from '@material-ui/icons/Info';
 import EmailIcon from '@material-ui/icons/Email';
 import AddressIcon from '@material-ui/icons/Business'
 import Drop from '../components/backdrop';
-
-
+import base64 from 'base-64';
+import {showSnackbarAction} from '../redux/actions/snackbarAction';
+import { connect  } from 'react-redux';
 
 class NGORegister extends React.Component {
 
@@ -194,11 +195,12 @@ REGISTER=()=>{
    axios.post(url,data,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
     .then(res=>{
        
-       this.setState({open:true,error:"Registration Complete!"});
+       this.props.Alert("Registration Complete!","success")
        localStorage.setItem("jwt", res.data.jwt);
-       localStorage.setItem("ngo",JSON.stringify(res.data.ngo));
-       localStorage.setItem("type","ngo");
-
+       localStorage.setItem("user",JSON.stringify(res.data.ngo));
+       localStorage.setItem(base64.encode("type"),base64.encode("ngo"));
+      
+       this.props.login(res.data.jwt,res.data.donor);
         setTimeout(()=>{
             this.setState({drop:false});
           this.props.history.push("/dashboard");
@@ -366,5 +368,13 @@ render(){
   
 }
 
-export default NGORegister;
+const mapDispatchToProps=(dispatch)=>{
+return{
+    Alert:(message,type)=>{dispatch(showSnackbarAction(message,type))},
+    login:(token,data)=>{dispatch({type:'LOGIN_SUCCESS',token:token,user:data});}
+}
+}
+
+export default connect(null,mapDispatchToProps)(NGORegister);
+
 

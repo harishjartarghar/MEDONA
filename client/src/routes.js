@@ -1,5 +1,5 @@
-import MY_DONATIONS from './views/donations.js';
-import Donor_Account from './views/account.js';
+import MY_DONATIONS from '../views/donations.js';
+import Donor_Account from '../views/account.js';
 import MailIcon from '@material-ui/icons/Mail';
 
 var routes = [
@@ -19,15 +19,7 @@ var routes = [
     component: Donor_Account,
     layout: "/dashboard",
     type:'donor',
-  },
-   {
-    path: "/logout",
-    name: "Logout",
-    icon: <MailIcon/>,
-    component: null,
-    layout: "/dashboard",
-    type:'donor',
-  },
+  }
 
 ];
 export default routes;
