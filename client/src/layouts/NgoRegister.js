@@ -77,7 +77,7 @@ handleInputChange=(e)=> {
 
 componentDidMount=()=>{
   let query = this.useQuery();
-  const url='http://localhost:8080/api/auth/ngo_register';
+  const url='/api/auth/ngo_register';
       axios.get(url,{headers:{'Content-Type': 'application/json','token':query.get("token")}})
     .then(res=>{
         if(res.data.type!=="ngo")
@@ -177,7 +177,7 @@ onSubmit=(e)=>{
 
 REGISTER=()=>{
   let query = this.useQuery();
-  const url='http://localhost:8080/api/auth/ngo_register';
+  const url='/api/auth/ngo_register';
   const data={
     email:this.state.email,
     name:this.state.ngoname,
