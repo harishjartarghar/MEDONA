@@ -120,7 +120,7 @@ var donor=0,ngo=0;
 
      Ngo.count((err, r) => {
      ngo=r[0]["count(*)"];
-     return res.json({total:total[0].sum,sold:sold[0].sum,label1,label2,data1,data2,donor,ngo})
+     return res.json({total:total[0]?total[0].sum:0,sold:sold[0]?sold[0].sum:0,label1,label2,data1,data2,donor,ngo})
     });
     });
  

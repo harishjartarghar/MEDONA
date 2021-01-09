@@ -67,8 +67,8 @@ export default function Home(props) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
+      <AppBar position="relative" >
+        <Toolbar onClick={()=>{props.history.push("/")}}>
           <AddBoxIcon className={classes.icon} />
           <Typography variant="h5" color="inherit" noWrap>
             Medona
