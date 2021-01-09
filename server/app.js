@@ -6,7 +6,7 @@ const bodyParser=require('body-parser');
 const colors=require('colors');
 const cors=require('cors');
 const  morgan=require('morgan');
-
+const path=require("path");
 // DATABASE METHODS();
 const connectMONGODB  = require('./config/MONGO_DB');
 const connectMYSQL = require('./config/MYSQL_DB');
@@ -15,7 +15,7 @@ const connectMYSQL = require('./config/MYSQL_DB');
 
 // Middlewares
 app.use(express.json());
-app.use(express.static(__dirname + '/public'));
+
 
 
 
@@ -42,15 +42,22 @@ connectMONGODB();
 
 
 
- 
-
-
 
 // Use Routes
 app.use('/api/auth',require('./routes/auth.routes'));
 // app.use('/api/admin',require('./routes/admin.routes'));
 app.use('/api/',require('./routes/index.routes'));
 
+
+app.use(express.static(path.join(__dirname ,"/client","/build")));
+
+if (process.env.NODE_ENV == 'production') {
+app.get("*",(req,res)=>{
+    
+    res.sendFile(path.join(__dirname,"..","/client","build","index.html"));
+})
+
+}
 
 
 // Setup server port
