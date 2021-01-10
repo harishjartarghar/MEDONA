@@ -33,6 +33,7 @@ class App extends Component {
       <Route exact path="/donor" component={DonorRegister}/>
       <Route exact path="/forgotpassword/donor" component={DonorForgot}/>
       <Route exact path="/forgotpassword/ngo" component={NgoForgot}/>
+      <Route exact path="/ngo" component={NgoRegister}/>
       <Route exact path="/statistics" component={stats}/>
       <Route exact path="/assistance" component={Chat}/>
       <Route path="/dashboard" component={Dashboard}/>
