@@ -19,25 +19,25 @@ class STATISTICS extends React.Component {
  componentDidMount=()=>{this.props.Get_Data()}
  render(){
   return (
-  	<div>
+  	<Container style={{padding:"0 10px"}}>
   	<Grid container spacing={2} style={{margin:"auto"}}>
-    <Grid item xs={6} style={{margin:"auto",width:"100px",heigth:"100px"}}>
+    <Grid item xs={12} md={6} style={{margin:"auto",width:"100px",heigth:"100px"}}>
     <Graph data1={this.props.donation.data1} label1={this.props.donation.label1} title="Medicine"/>
     </Grid>
-    <Grid item xs={6} style={{margin:"auto"}}>
+    <Grid item xs={12} md={6} style={{margin:"auto"}}>
     <Graph data1={this.props.donation.data2} label1={this.props.donation.label2} title="Total Medicine (Category Wise) "/>
     </Grid>
-    <Grid item xs={6} style={{margin:"auto"}}>
+    <Grid item xs={12}  md={6} style={{margin:"auto"}}>
     <Graph data1={this.props.donation.data3} label1={this.props.donation.label3} title="Medicine Donated (Category Wise)"/>
     </Grid>
-    <Grid item xs={6} style={{margin:"auto"}}>
+    <Grid item xs={12} md={6} style={{margin:"auto"}}>
     <Graph data1={this.props.donation.data4} label1={this.props.donation.label4} title="No of Users"/>
     </Grid>
     
   
     </Grid>
     	
-    </div>
+    </Container>
   );
 }
 }
