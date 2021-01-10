@@ -275,7 +275,7 @@ export const DONOR_FORGOT_PASSWORD=(password,token,props)=>{
 export const NGO_FORGOT_PASSWORD=(password,token,props)=>{
     return (dispatch,getState)=>{
          dispatch({type:'TOGGLE_DROP'});
-ngo
+
             axios.put(BASE_URL+'/auth/ngo_forgot_password',{password},{headers:{'Content-Type': 'application/json',token:token}})
             .then(res=>{
                 dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"PASSWORD UPDATED!",snackbarType:"success"});
