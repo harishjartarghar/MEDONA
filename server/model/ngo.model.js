@@ -2,13 +2,8 @@ const mysql = require("mysql");
 const dbConfig = require("../config/config.js");
 const Address=require('./address.model');
 const Mobile=require('./mobile.model');
-// Create a connection to the database
-const sql = mysql.createConnection({
-  host: dbConfig.HOST,
-  user: dbConfig.USER,
-  password: dbConfig.PASSWORD,
-  database: dbConfig.DB
-});
+const sql=require('../config/MYSQL_DB.js');
+
 
 // constructor
 const NGO = function(ngo) {
@@ -193,6 +188,29 @@ NGO.updateById = (id, ngo, result) => {
 
       console.log("updated ngo: ", { id: id, ...ngo });
       result(null, { id: id, ...ngo });
+    }
+  );
+};
+
+NGO.PasswordById = (ngo, result) => {
+  sql.query(
+    "UPDATE ngos SET password = ? WHERE id = ?",
+    [ngo.password,ngo.id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Donor with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated donor: ", { id: ngo.id, ...ngo });
+      result(null, { id: ngo.id, ...ngo });
     }
   );
 };

@@ -4,7 +4,7 @@ import donor from '../assets/donor.jpeg'
 import donor_check from '../assets/donor_check.jpeg'
 import ngo from '../assets/ngo.jpeg'
 import ngo_check from '../assets/ngo_check.jpeg'
-import {DONOR_INVITE,NGO_INVITE} from '../redux/actions/authActions';
+import {DONOR_FORGOT_INVITE,NGO_FORGOT_INVITE} from '../redux/actions/authActions';
 import {showSnackbarAction} from '../redux/actions/snackbarAction';
 import { connect ,useSelector, useDispatch } from 'react-redux';
 
@@ -15,51 +15,40 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 
-function Signup(props) {
+function Signup({modal,toggle,...props}) {
   const [dS,setDS]=useState(false);
   const [ngoS,setNGOS]=useState(false);
   const [Email,setEmail]=useState("");
-  const [mobile,setMobile]=useState("");
   const [error,setError]=useState(false);
-  const [Merror,setMError]=useState(false);
-  const { signupModal } = useSelector(state => state.snackbar);
-  const dispatch = useDispatch()
+
+
 
 
 
 function submit()
 {
-  if(Email===""){setError(true);setMError(false);props.Alert("Email is required!","error");return;}
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(Email)) {setError(true);setMError(false);props.Alert("Enter Valid Email!","error");return;}
+  if(Email===""){setError(true);props.Alert("Email is required!","error");return;}
+ if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(Email)) {setError(true);props.Alert("Enter Valid Email!","error");return;}
 
-  if(ngoS){
-    if(mobile===""){setMError(true);props.Alert("Mobile No is required!","error");return;}
-    if(isNaN(mobile)){props.Alert("Enter Valid Mobile No :)","error");return;}
-    if(mobile.length!==10){props.Alert("Enter Valid Mobile No :)","error");return;}
-
-  }
-
-  if(!dS && !ngoS){props.Alert("Select Registration Type","error");return;}
+  if(!dS && !ngoS){props.Alert("Select Type","error");return;}
 
 
   if(dS)
     {props.Donor_Invite(Email);}
   else
-    {props.Ngo_Invite(Email,mobile);}
- 
-  
+    {props.Ngo_Invite(Email);}
 setEmail("");
-setMobile("");
 setDS(false);
 setNGOS(false);
-setError(false);
-setMError(false);
+ toggle();
+  
+
 }
   
   function donor_click(){
     setDS(!dS);
     setNGOS(false);
-    setMError(false);
+  
     setError(false)
   } 
 
@@ -67,7 +56,6 @@ setMError(false);
   function ngo_click(){
     setNGOS(!ngoS);
     setDS(false);
-     setMError(false);
     setError(false)
   } 
 
@@ -77,11 +65,11 @@ setMError(false);
 
   return (
         <Dialog fullWidth={true} 
-        onClose={() => dispatch({ type: 'TOGGLE_MODAL' })}
+        onClose={toggle}
         maxWidth="xs" TransitionComponent={Transition}
-        keepMounted open={signupModal}  aria-labelledby="alert-dialog-title"
+        keepMounted open={modal}  aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description">
-        <DialogTitle id="form-dialog-title" style={{textAlign:"center"}}>Register As :</DialogTitle>
+        <DialogTitle id="form-dialog-title" style={{textAlign:"center"}}>Forgot Password</DialogTitle>
         <DialogContent style={{textAlign:"center"}}>
         
          <Grid container style={{textAlign:"center",marginTop:"30px",}}>
@@ -108,32 +96,18 @@ setMError(false);
             
             autoFocus
             size="small"
-            helperText={error?"Email is not valid":null}
+            helperText={error?"Email is not valid!":null}
             value={Email}
           
           />
-         {ngoS? <TextField
-                     variant="outlined"
-                     margin="normal"
-                     fullWidth
-                     required
-                     error={Merror}
-                     onChange={(e)=>{setMobile(e.target.value)}}
-                     id="mobile"
-                     label="Mobile No"
-                     name="mobile"
-                     size="small"
-                     helperText={Merror?"Mobile is required!":null}
-                     value={mobile}
-                   
-                   />:null}
+         
         </DialogContent>
         <DialogActions>
-          <Button  onClick={()=>{setEmail("");setError(false);setDS(false);setNGOS(false);dispatch({ type: 'TOGGLE_MODAL' })}} color="primary">
+          <Button  onClick={()=>{setEmail("");setError(false);setDS(false);setNGOS(false);toggle()}} color="primary">
             Cancel
           </Button>
           <Button  color="primary" onClick={submit}>
-            signup
+            submit
           </Button>
         </DialogActions>
       </Dialog>
@@ -147,8 +121,8 @@ setMError(false);
 
 const mapDispatchToProps=(dispatch)=>{
 return{
-    Donor_Invite:(email)=>{dispatch(DONOR_INVITE(email))},
-    Ngo_Invite:(email,mobile)=>{dispatch(NGO_INVITE(email,mobile))},
+    Donor_Invite:(email)=>{dispatch(DONOR_FORGOT_INVITE(email))},
+    Ngo_Invite:(email,mobile)=>{dispatch(NGO_FORGOT_INVITE(email))},
     Alert:(message,type)=>{dispatch(showSnackbarAction(message,type))},
 }
 }

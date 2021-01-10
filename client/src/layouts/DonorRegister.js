@@ -31,16 +31,16 @@ constructor(props)
     horizontal: 'center',
     error:null,
     access:true,
-    email:null,
+    email:"",
     loading:true,
-    mobile:null,
-    city:null,
-    password:null,
-    firstName:null,
-    lastName:null,
+    mobile:"",
+    city:"",
+    password:"",
+    firstName:"",
+    lastName:"",
     Ecity:false,
     Ename:false,
-    re_password:null,
+    re_password:"",
     Epassword:false,
     Ere_password:false,
     drop:false,
@@ -104,7 +104,8 @@ getStepContent=(stepIndex)=> {
 onSubmit=(e)=>{
  if(this.state.password===null || this.state.password==="")
       {
-        this.setState({Epassword:true,error:"Enter All Details",open:true});
+  
+        this.props.Alert("Enter All Details","error")
         return; 
       }
       else
@@ -112,9 +113,17 @@ onSubmit=(e)=>{
         this.setState({Epassword:false});
       }
 
+       if(this.state.password.length<=6)
+      {
+  
+        this.props.Alert("Password Length should be atleast 7 characters!","error")
+        return; 
+      }
+      
       if(this.state.re_password===null || this.state.re_password==="")
       {
-        this.setState({Ere_password:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error")
+        
         return;
       }
      
@@ -126,11 +135,9 @@ onSubmit=(e)=>{
 
       if(this.state.password!==this.state.re_password)
       {
-        this.setState({Ere_password:true,error:"Passwords don't match!",open:true});
+        this.props.Alert("Passwords don't match!","error")
         return;
       }
-
-      this.setState({drop:true});
 
       this.REGISTER();
 }
@@ -171,7 +178,8 @@ REGISTER=()=>{
   handleNext = () => {
      if(this.state.firstName===null || this.state.firstName==="")
       {
-        this.setState({Ename:true,error:"Enter All Details",open:true});
+        
+        this.props.Alert("Enter All Details","error")
         return; 
       }
       else
@@ -181,7 +189,8 @@ REGISTER=()=>{
 
       if(this.state.mobile===null || this.state.mobile==="")
       {
-        this.setState({Emobile:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error")
+        
         return;
       }
      
@@ -191,10 +200,25 @@ REGISTER=()=>{
         this.setState({Emobile:false});
       }
 
+      if(isNaN(this.state.mobile))
+      {
+        this.props.Alert("Enter Valid Mobile No","error")   
+        return;
+      }
+
+      if(this.state.mobile.length!==10)
+      {
+        this.props.Alert("Enter Valid Mobile No","error")   
+        return;
+      }
+     
+    
+
       
       if(this.state.city===null || this.state.city==="")
       {
-          this.setState({Ecity:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error")
+          
           return;
       }
       else

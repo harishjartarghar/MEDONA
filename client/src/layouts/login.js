@@ -7,6 +7,7 @@ import ngo from '../assets/ngo.jpeg'
 import ngo_check from '../assets/ngo_check.jpeg'
 import './style.css'
 import Signup from '../components/signup';
+import Forgot from '../components/forgot_password';
 import { useDispatch,useSelector } from "react-redux";
 import {DONOR_LOGIN,NGO_LOGIN} from '../redux/actions/authActions';
 import {showSnackbarAction} from '../redux/actions/snackbarAction';
@@ -75,6 +76,8 @@ function LOGIN(props) {
   const [Eemail,setEEmail]=useState(false);
   const [password,setPassword]=useState("");
   const [Epassword,setEPassword]=useState(false);
+  const [modal,setModal]=useState(false);
+ 
   
 function LOGIN(e)
 {
@@ -185,7 +188,12 @@ function LOGIN(e)
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs={12} style={{textAlign:"center",margin:"20px 0px"}}>
+          <Grid item xs={12} style={{textAlign:"center",margin:"10px 0px"}}>
+              <Link style={{cursor: "pointer"}}  variant="body2" onClick={() => setModal(true)}>
+                {"Forgot Password?"}
+              </Link>
+            </Grid>
+            <Grid item xs={12} style={{textAlign:"center",marginBottom:"20px"}}>
               <Link style={{cursor: "pointer"}}  variant="body2" onClick={() => dispatch({ type: 'TOGGLE_MODAL' })}>
                 {"Don't have an account? Sign Up"}
               </Link>
@@ -199,6 +207,7 @@ function LOGIN(e)
    
     </Container>
        <Signup/>
+       <Forgot modal={modal} toggle={()=>{setModal(!modal)}}/>
     </div>
   );
 }

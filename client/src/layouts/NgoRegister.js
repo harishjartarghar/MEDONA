@@ -32,22 +32,22 @@ constructor(props)
     horizontal: 'center',
     error:null,
     access:true,
-    email:null,
+    email:"",
     loading:true,
     drop:false,
-    mobile:null,
-    Amobile:null,
-    street:null,
-    district:null,
-    state:null,
-    pincode:null,
-    city:null,
-    password:null,
-    ngoname:null,
+    mobile:"",
+    Amobile:"",
+    street:"",
+    district:"",
+    state:"",
+    pincode:"",
+    city:"",
+    password:"",
+    ngoname:"",
     Ecity:false,
     Engoname:false,
     Ename:false,
-    re_password:null,
+    re_password:"",
     Epassword:false,
     Ere_password:false,
     Estreet:false,
@@ -145,7 +145,7 @@ getStepButton=(stepIndex)=> {
 onSubmit=(e)=>{
  if(this.state.password===null || this.state.password==="")
       {
-        this.setState({Epassword:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error")
         return; 
       }
       else
@@ -153,9 +153,15 @@ onSubmit=(e)=>{
         this.setState({Epassword:false});
       }
 
+if(this.state.password.length<=6)
+      {
+        this.props.Alert("Password Length should be atleast 7 characters!","error")
+        return; 
+      }
+      
       if(this.state.re_password===null || this.state.re_password==="")
       {
-        this.setState({Ere_password:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error")
         return;
       }
      
@@ -167,7 +173,7 @@ onSubmit=(e)=>{
 
       if(this.state.password!==this.state.re_password)
       {
-        this.setState({Ere_password:true,error:"Passwords don't match!",open:true});
+        this.props.Alert("Enter All Details","error");
         return;
       }
 
@@ -216,7 +222,7 @@ REGISTER=()=>{
 Details=()=>{
    if(this.state.ngoname===null || this.state.ngoname==="")
       {
-        this.setState({Engoname:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error");
         return; 
       }
       else
@@ -226,7 +232,7 @@ Details=()=>{
 
       if(this.state.mobile===null || this.state.mobile==="")
       {
-        this.setState({Emobile:true,error:"Enter All Details",open:true});
+        this.props.Alert("Enter All Details","error");
         return;
       }
          else
@@ -234,6 +240,19 @@ Details=()=>{
 
         this.setState({Emobile:false});
       }
+
+       if(isNaN(this.state.mobile))
+      {
+        this.props.Alert("Enter Valid Mobile No","error")   
+        return;
+      }
+     
+       if(isNaN(this.state.Amobile) && this.state.Amobile!=="")
+      {
+        this.props.Alert("Enter Valid Alt. Mobile No","error")   
+        return;
+      }
+    
 
       this.handleNext();
 }
@@ -243,7 +262,7 @@ addressDetails=()=>{
 
    if(this.state.street===null || this.state.street==="")
       {
-        this.setState({Estreet:true,error:"Enter All Details",open:true});
+         this.props.Alert("Enter All Details","error");
         return; 
       }
       else
@@ -253,7 +272,7 @@ addressDetails=()=>{
 
       if(this.state.city===null || this.state.city==="")
       {
-        this.setState({Ecity:true,error:"Enter All Details",open:true});
+         this.props.Alert("Enter All Details","error");
         return;
       }
          else
@@ -264,7 +283,7 @@ addressDetails=()=>{
 
        if(this.state.district===null || this.state.district==="")
       {
-        this.setState({Edistrict:true,error:"Enter All Details",open:true});
+         this.props.Alert("Enter All Details","error");
         return;
       }
          else
@@ -275,7 +294,7 @@ addressDetails=()=>{
 
        if(this.state.state===null || this.state.state==="")
       {
-        this.setState({Estate:true,error:"Enter All Details",open:true});
+         this.props.Alert("Enter All Details","error");
         return;
       }
          else
@@ -286,7 +305,7 @@ addressDetails=()=>{
 
         if(this.state.pincode===null || this.state.pincode==="")
       {
-        this.setState({Epincode:true,error:"Enter All Details",open:true});
+         this.props.Alert("Enter All Details","error");
         return;
       }
          else

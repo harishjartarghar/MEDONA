@@ -14,15 +14,6 @@ import { connect  } from 'react-redux';
 
 
 
-
-
-
-
-
-
-
-
-
 class STATISTICS extends React.Component {
 
  componentDidMount=()=>{this.props.Get_Data()}
@@ -30,7 +21,7 @@ class STATISTICS extends React.Component {
   return (
   	<div>
   	<Grid container spacing={2} style={{margin:"auto"}}>
-    <Grid item xs={6} style={{margin:"auto"}}>
+    <Grid item xs={6} style={{margin:"auto",width:"100px",heigth:"100px"}}>
     <Graph data1={this.props.donation.data1} label1={this.props.donation.label1} title="Medicine"/>
     </Grid>
     <Grid item xs={6} style={{margin:"auto"}}>
