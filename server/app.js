@@ -35,7 +35,7 @@ app.use(morgan('dev'));
 
 
 // Connect to database
-connectMYSQL();
+//connectMYSQL();
 connectMONGODB();
 
 

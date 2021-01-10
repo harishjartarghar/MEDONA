@@ -116,6 +116,20 @@ function onSubmit()
     props.Alert("Enter Medicine Expiry Date","error");
     return;
   }
+var d1 = new Date();
+var d2 = new Date(expiry);
+
+
+    if(d1.getTime()>d2.getTime())
+  {
+    setEName(false);
+    setECategory(false);
+    setEExpiry(true);
+    setEQuantity(false);
+    props.Alert("Enter Valid Expiry Date!","error");
+    return;
+  }
+
 
     setEName(false);
     setECategory(false);

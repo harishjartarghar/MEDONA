@@ -62,6 +62,63 @@ export const NGO_INVITE=(email,mobile)=>{
     }
 }
 
+export const DONOR_FORGOT_INVITE=(email)=>{
+    return (dispatch,getState)=>{
+       dispatch({type:'TOGGLE_DROP'});
+
+        axios.post(BASE_URL+'/auth/donor_forgot_password',{email:email},{headers:{'Content-Type': 'application/json'}})
+    .then(res=>{
+       dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"RESET PASSWORD LINK SENT",snackbarType:"success"});
+       dispatch({type:'TOGGLE_DROP'});
+ 
+
+         setTimeout(()=>{
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+    })
+    .catch(error=>{
+       dispatch({type:'TOGGLE_DROP'});
+       dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:error.response.data.message,snackbarType:"error"});
+               setTimeout(()=>{
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+    });
+        
+    }
+}
+
+export const NGO_FORGOT_INVITE=(email)=>{
+    return (dispatch,getState)=>{
+       dispatch({type:'TOGGLE_DROP'});
+
+        axios.post(BASE_URL+'/auth/ngo_forgot_password',{email:email},{headers:{'Content-Type': 'application/json'}})
+    .then(res=>{
+       dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"RESET PASSWORD LINK SENT",snackbarType:"success"});
+       dispatch({type:'TOGGLE_DROP'});
+ 
+
+         setTimeout(()=>{
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+    })
+    .catch(error=>{
+       dispatch({type:'TOGGLE_DROP'});
+       dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:error.response.data.message,snackbarType:"error"});
+               setTimeout(()=>{
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+    });
+        
+    }
+}
 
 
 
@@ -178,6 +235,77 @@ export const DONOR_PASSWORD=(password,props)=>{
     }
 }
 
+
+export const DONOR_FORGOT_PASSWORD=(password,token,props)=>{
+    return (dispatch,getState)=>{
+         dispatch({type:'TOGGLE_DROP'});
+
+            axios.put(BASE_URL+'/auth/donor_forgot_password',{password},{headers:{'Content-Type': 'application/json',token:token}})
+            .then(res=>{
+                dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"PASSWORD UPDATED!",snackbarType:"success"});
+                props.history.push("/login");
+               
+               setTimeout(()=>{
+                
+                dispatch({type:'TOGGLE_DROP'});
+                dispatch({
+                    type:"HIDE_SNACKBAR"
+                })
+
+        },2000)
+                
+                
+            })
+            .catch(error=>{
+                console.log(error);
+                  dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"Link Expired!",snackbarType:"error"});
+                    props.history.push("/login");
+               setTimeout(()=>{
+                dispatch({type:'TOGGLE_DROP'});
+                
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+                
+            })
+    }
+}
+
+export const NGO_FORGOT_PASSWORD=(password,token,props)=>{
+    return (dispatch,getState)=>{
+         dispatch({type:'TOGGLE_DROP'});
+ngo
+            axios.put(BASE_URL+'/auth/ngo_forgot_password',{password},{headers:{'Content-Type': 'application/json',token:token}})
+            .then(res=>{
+                dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"PASSWORD UPDATED!",snackbarType:"success"});
+                props.history.push("/login");
+               
+               setTimeout(()=>{
+                
+                dispatch({type:'TOGGLE_DROP'});
+                dispatch({
+                    type:"HIDE_SNACKBAR"
+                })
+
+        },2000)
+                
+                
+            })
+            .catch(error=>{
+                console.log(error);
+                  dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:error.response.data.message,snackbarType:"error"});
+               setTimeout(()=>{
+                dispatch({type:'TOGGLE_DROP'});
+                
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+                
+            })
+    }
+}
 
 export const NGO_LOGIN=(email,password,type,props)=>{
     return (dispatch,getState)=>{

@@ -2,7 +2,7 @@ const Donor = require("../model/donor.model");
 const Ngo = require("../model/ngo.model");
 const Mobile = require("../model/mobile.model");
 const bcrypt = require('bcryptjs');
-const { verify_subject, verify_template,ngo_verify_template,ngo_verify_subject } = require("../config/mailtemplate");
+const { verify_subject, verify_template,ngo_verify_template,ngo_verify_subject,donor_forgot_template ,ngo_forgot_template } = require("../config/mailtemplate");
 const jwt = require('jsonwebtoken');
 const { VERIFY_MAIL } = require("../config/nodemailer");
 const config = require("../config/config");
@@ -323,4 +323,100 @@ exports.LOGIN_NGO=async (req,res)=>{
   });
 
   
+}
+
+
+exports.DONOR_FORGOT_PASSWORD=async (req,res)=>{
+  const {email}=req.body;
+
+  //checking if email is already registered
+    Donor.findByEmail(email,(err, data) => {
+    if (err)
+    {
+      console.log(err);
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    }
+      
+    
+    if(data)
+       {
+         const token=jwt.sign({id:data.id},config.JWT_SECRET,{ expiresIn: '1h' }); 
+         VERIFY_MAIL(email,donor_forgot_template(token),"RESET PASSWORD");
+
+
+         return res.status(201).json({message: 'PASSWORD RESET LINK SENT TO EMAIL'});
+       }
+
+   return res.status(422).json({message: 'EMAIL IS NOT REGISTERED!'});
+
+  });
+}
+
+exports.DONOR_SET_FORGOT_PASSWORD=async (req,res)=>{
+    const {password}=req.body;
+    //hashing password
+     const salt=await bcrypt.genSalt(12);
+     const hashedpassword=await bcrypt.hash(password,salt);
+
+
+        //checking if email is already registered
+    Donor.PasswordById({password:hashedpassword,id:req.donor.id},async (err, data) => {
+    if (err)
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    return res.status(201).json("success");
+  });
+}
+
+
+exports.NGO_FORGOT_PASSWORD=async (req,res)=>{
+  const {email}=req.body;
+
+  //checking if email is already registered
+    Ngo.findByEmail(email,(err, data) => {
+    if (err)
+    {
+      console.log(err);
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    }
+      
+    
+    if(data)
+       {
+         const token=jwt.sign({id:data.id},config.JWT_SECRET,{ expiresIn: '1h' }); 
+         VERIFY_MAIL(email,ngo_forgot_template(token),"RESET PASSWORD");
+
+
+         return res.status(201).json({message: 'PASSWORD RESET LINK SENT TO EMAIL'});
+       }
+
+   return res.status(422).json({message: 'EMAIL IS NOT REGISTERED!'});
+
+  });
+}
+
+exports.NGO_SET_FORGOT_PASSWORD=async (req,res)=>{
+    const {password}=req.body;
+    //hashing password
+     const salt=await bcrypt.genSalt(12);
+     const hashedpassword=await bcrypt.hash(password,salt);
+
+
+        //checking if email is already registered
+    Ngo.PasswordById({password:hashedpassword,id:req.ngo.id},async (err, data) => {
+    if (err)
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    return res.status(201).json("success");
+  });
 }

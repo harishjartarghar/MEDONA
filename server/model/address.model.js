@@ -1,13 +1,6 @@
 const mysql = require("mysql");
 const dbConfig = require("../config/config.js");
-
-// Create a connection to the database
-const sql = mysql.createConnection({
-  host: dbConfig.HOST,
-  user: dbConfig.USER,
-  password: dbConfig.PASSWORD,
-  database: dbConfig.DB
-});
+const sql=require('../config/MYSQL_DB.js');
 
 // constructor
 const Address = function(data) {

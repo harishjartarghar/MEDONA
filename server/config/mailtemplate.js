@@ -22,7 +22,21 @@ exports.ngo_verify_template=(token)=>{
 	`
 };
 
+exports.donor_forgot_template=(token)=>{
+  return `
+  <p>Hello,</p>
+  <p>Below is your Password reset link.</p>
+  <p>${config.BASE_URL}/forgotpassword/donor?token=${token}</p>
+  `
+};
 
+exports.ngo_forgot_template=(token)=>{
+  return `
+  <p>Hello,</p>
+  <p>Below is your Password reset link.</p>
+  <p>${config.BASE_URL}/forgotpassword/ngo?token=${token}</p>
+  `
+};
 
 exports.ngo_order='ORDER CONFIRMATION';
 
