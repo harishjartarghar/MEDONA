@@ -335,6 +335,7 @@ export const NGO_LOGIN=(email,password,type,props)=>{
                 console.log(error);
                   dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:error.response.data.message,snackbarType:"error"});
                setTimeout(()=>{
+ dispatch({type:'TOGGLE_DROP'});
             dispatch({
                 type:"HIDE_SNACKBAR"
             })
@@ -377,3 +378,78 @@ export const CHECK_AUTH=()=>{
     }
 }
 
+
+export const NGO_PASSWORD=(password,props)=>{
+    return (dispatch,getState)=>{
+         dispatch({type:'TOGGLE_DROP'});
+
+            axios.put(BASE_URL+'/auth/ngo_password',{password},{headers:{'Content-Type': 'application/json',token:localStorage.getItem("jwt")}})
+            .then(res=>{
+                
+                dispatch({type:'NGO_PASSWORD'});
+                dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"PASSWORD UPDATED!",snackbarType:"success"});
+              
+               setTimeout(()=>{
+                
+                dispatch({type:'TOGGLE_DROP'});
+                dispatch({
+                    type:"HIDE_SNACKBAR"
+                })
+
+        },2000)
+                
+                
+            })
+            .catch(error=>{
+                console.log(error);
+                  dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:error.response.data.message,snackbarType:"error"});
+               setTimeout(()=>{
+                dispatch({type:'TOGGLE_DROP'});
+                
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+                dispatch({type:'LOGIN_ERROR',error});
+            })
+    }
+}
+
+
+export const NGO_PROFILE=(data,props)=>{
+    return (dispatch,getState)=>{
+         dispatch({type:'TOGGLE_DROP'});
+
+
+
+            axios.put(BASE_URL+'/auth/ngo_profile',data,{headers:{'Content-Type': 'application/json',token:localStorage.getItem("jwt")}})
+            .then(res=>{
+                localStorage.setItem("user",JSON.stringify(data));
+                dispatch({type:'PROFILE_UPDATE_NGO'});
+                dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:"DETAILS UPDATED!",snackbarType:"success"});
+              
+               setTimeout(()=>{
+                
+                dispatch({type:'TOGGLE_DROP'});
+                dispatch({
+                    type:"HIDE_SNACKBAR"
+                })
+
+        },2000)
+                
+                
+            })
+            .catch(error=>{
+                console.log(error);
+                  dispatch({type:'SHOW_SNACKBAR',snackbar:true,message:error.response.data.message,snackbarType:"error"});
+               setTimeout(()=>{
+                dispatch({type:'TOGGLE_DROP'});
+                
+            dispatch({
+                type:"HIDE_SNACKBAR"
+            })
+        },2000)
+                dispatch({type:'LOGIN_ERROR',error});
+            })
+    }
+}

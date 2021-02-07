@@ -8,7 +8,7 @@ import AutoComplete from './autocomplete';
 import {Medicine} from '../assets/data';
 import {NEW_DONATION,DELETE_DONATION,UPDATE_DONATION} from '../redux/actions/donationAction';
 import {showSnackbarAction} from '../redux/actions/snackbarAction';
-import {DONOR_PROFILE,DONOR_PASSWORD} from '../redux/actions/authActions';
+import {NGO_PROFILE,NGO_PASSWORD} from '../redux/actions/authActions';
 import { useDispatch,useSelector ,connect} from "react-redux";
 import moment from 'moment';
 import EditIcon from '@material-ui/icons/Edit';
@@ -61,7 +61,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function Account({item,...props}) {
   const classes = useStyles();
-  const { name, email, mobile,city,_id ,alternate} = useSelector(state => state.auth.user);
+  const { name, email, mobile,city,id ,alternate} = useSelector(state => state.auth.user);
 
 const [edit,setEdit]=useState(true);
 const [Name,setName]=useState(name);
@@ -87,18 +87,16 @@ function onSubmit()
   	props.Alert("Name should not be empty!","error");
   	return;
   }
-   if(Mobile==="" || Mobile===null || Mobile===undefined)
-  {
-  	props.Alert("Mobile No. should not be empty!","error");
-  	return;
-  }
-   if(City==="" || City===null || City===undefined)
-  {
-  	props.Alert("City should not be empty!","error");
-  	return;
-  }
 
-  const data={name:Name,mobile:Mobile,city:City,email}
+  if(Alternate===Mobile)
+  {
+    props.Alert("Primary and Alternate Mobile Cannot be same!","error");
+    return;
+  }
+  
+
+
+  const data={id:id,name:Name,alternate:Alternate,email,mobile:Mobile}
   props.Update_Profile(data);
   setEdit(true);
   
@@ -211,7 +209,7 @@ setRPassword(null);
           }}
           inputProps={{
           	 
-            readOnly: edit,
+            readOnly: true,
 
           }}
                 
@@ -226,7 +224,7 @@ setRPassword(null);
                 fullWidth
                 id="expiry"
                 label="Alternate Mobile No:"
-               	onChange={(e)=>{setCity(e.target.value)}}
+               	onChange={(e)=>{setAlternate(e.target.value)}}
                 
 
                 InputLabelProps={{
@@ -314,10 +312,11 @@ setRPassword(null);
                 id="Email"
                 type="password"
                 label="Re-enter Password"
-            	onChange={(e)=>{setRPassword(e.target.value)}}
+            	  onChange={(e)=>{setRPassword(e.target.value)}}
               	
+
               
-                InputLabelProps={{
+            InputLabelProps={{
             shrink: true,
 
           }}
@@ -354,8 +353,8 @@ setRPassword(null);
 
 const mapDispatchToProps=(dispatch)=>{
 return{
-   Update_Profile:(data)=>{dispatch(DONOR_PROFILE(data))},
-   Update_Password:(password)=>{dispatch(DONOR_PASSWORD(password))},
+   Update_Profile:(data)=>{dispatch(NGO_PROFILE(data))},
+   Update_Password:(password)=>{dispatch(NGO_PASSWORD(password))},
     Alert:(message,type)=>{dispatch(showSnackbarAction(message,type))},
 }
 }

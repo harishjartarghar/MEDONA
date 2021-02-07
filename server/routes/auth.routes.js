@@ -14,10 +14,12 @@ const {
 		DONOR_FORGOT_PASSWORD,
 		NGO_FORGOT_PASSWORD,
 		DONOR_SET_FORGOT_PASSWORD,
-		NGO_SET_FORGOT_PASSWORD
+		NGO_SET_FORGOT_PASSWORD,
+		PASSWORD_NGO,
+		PROFILE_NGO
 	  }=
 require('../controllers/auth.controllers');
-const {DonorVerify}=require('../middleware/auth');
+const {DonorVerify,NgoVerify}=require('../middleware/auth');
 
 
 
@@ -60,8 +62,16 @@ app.route("/ngo_register")
 app.route("/ngo_login")
    .post(LOGIN_NGO)
 
+
+app.route("/ngo_password")
+   .put(NgoVerify,PASSWORD_NGO)
+
 app.route("/ngo_forgot_password")
    .post(NGO_FORGOT_PASSWORD)
-   .put(DonorVerify,NGO_SET_FORGOT_PASSWORD)
+   .put(NgoVerify,NGO_SET_FORGOT_PASSWORD)
+
+   //Login Donor
+app.route("/ngo_profile")
+   .put(NgoVerify,PROFILE_NGO)
 
 module.exports =app;
