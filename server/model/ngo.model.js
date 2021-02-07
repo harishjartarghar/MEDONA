@@ -169,10 +169,23 @@ NGO.getAll = result => {
   });
 };
 
-NGO.updateById = (id, ngo, result) => {
+NGO.updateById = (ngo, result) => {
   sql.query(
-    "UPDATE ngos SET email = ?, name = ?, active = ? WHERE id = ?",
-    [ngo.email, ngo.name, ngo.active, id],
+    "UPDATE ngos SET name = ? WHERE id = ?",
+    [ngo.name, ngo.id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+    }
+  );
+
+
+  sql.query(
+    "UPDATE mobiles  SET mobile = ? WHERE ngo_id = ? AND mobile!=?",
+    [ngo.alternate, ngo.id,ngo.mobile],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -182,12 +195,20 @@ NGO.updateById = (id, ngo, result) => {
 
       if (res.affectedRows == 0) {
         // not found NGO with the id
-        result({ kind: "not_found" }, null);
-        return;
+        sql.query("INSERT INTO mobiles SET ngo_id=?,mobile=?", [ngo.id,ngo.alternate], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    result(null, {...ngo });
+  });
+       
       }
 
-      console.log("updated ngo: ", { id: id, ...ngo });
-      result(null, { id: id, ...ngo });
+      console.log("updated ngo: ", {  ...ngo });
+      result(null, {  ...ngo });
     }
   );
 };

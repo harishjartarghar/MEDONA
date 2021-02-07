@@ -420,3 +420,38 @@ exports.NGO_SET_FORGOT_PASSWORD=async (req,res)=>{
     return res.status(201).json("success");
   });
 }
+
+
+exports.PASSWORD_NGO=async (req,res)=>{
+      //hashing password
+     const salt=await bcrypt.genSalt(12);
+     const hashedpassword=await bcrypt.hash(req.body.password,salt);
+
+      //checking if email is already registered
+    Ngo.PasswordById({password:hashedpassword,id:req.ngo.id},async (err, data) => {
+    if (err)
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    return res.status(201).json({message:"success"});
+  });
+
+}
+
+
+exports.PROFILE_NGO=async (req,res)=>{
+    const ngo={name:req.body.name,alternate:req.body.alternate,mobile:req.body.mobile,id:req.ngo.id}
+
+      //checking if email is already registered
+    Ngo.updateById(ngo,async (err, data) => {
+      console.log(err);
+    if (err)
+      return res.status(500).json({
+        message:
+          err.message || "Some error occurred."
+      });
+    return res.status(201).json(data);
+  });
+
+}

@@ -203,7 +203,8 @@ REGISTER=()=>{
        
        this.props.Alert("Registration Complete!","success")
        localStorage.setItem("jwt", res.data.jwt);
-       localStorage.setItem("user",JSON.stringify(res.data.ngo));
+       localStorage.setItem("user",JSON.stringify({id:res.data.ngo.id,email:data.email,alternate:data.Amobile,mobile:data.mobile,name:data.name}));
+       
        localStorage.setItem(base64.encode("type"),base64.encode("ngo"));
       
        this.props.login(res.data.jwt,res.data.donor);
